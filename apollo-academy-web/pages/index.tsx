@@ -1,8 +1,14 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { Header } from '../components/Header';
+import { withUrqlClient } from 'next-urql';
+import { urqlClient } from '../utils/urqlClient';
 
-export default function Home() {
+const Home = () => {
   return (
-    <h1>Hello world</h1>
+    <>
+      <Header/>
+      <h1>Hello world</h1>
+    </>
   )
 }
+
+export default withUrqlClient(urqlClient)(Home);
