@@ -37,13 +37,13 @@ export type User = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser: UserResponse;
+  register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
 };
 
 
-export type MutationCreateUserArgs = {
+export type MutationRegisterArgs = {
   password: Scalars['String'];
   email: Scalars['String'];
   name: Scalars['String'];
@@ -109,7 +109,7 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { createUser: (
+  & { register: (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'ErrorField' }
@@ -166,8 +166,8 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const RegisterDocument = gql`
-    mutation register($name: String!, $email: String!, $password: String!) {
-  createUser(name: $name, email: $email, password: $password) {
+    mutation Register($name: String!, $email: String!, $password: String!) {
+  register(name: $name, email: $email, password: $password) {
     errors {
       field
       message

@@ -1,10 +1,9 @@
-import { Box, Flex, Link } from '@chakra-ui/layout';
-import React, { useState } from 'react';
-import NextLink from 'next/link'
-import { useLogoutMutation, useVerifyLoginQuery } from '../generated/graphql';
-import { Button, Input } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import { SearchIcon } from '@chakra-ui/icons';
+import { Box, Flex, Link } from '@chakra-ui/layout';
+import { Button, Input } from '@chakra-ui/react';
+import NextLink from 'next/link';
+import React, { useState } from 'react';
+import { useLogoutMutation, useVerifyLoginQuery } from '../generated/graphql';
 
 interface navbarProps { }
 

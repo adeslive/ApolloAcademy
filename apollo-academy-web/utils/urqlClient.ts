@@ -1,8 +1,7 @@
-import { ssrExchange } from "@urql/core";
+import { cacheExchange } from '@urql/exchange-graphcache';
 import { dedupExchange, fetchExchange } from "urql";
-import { cacheExchange } from '@urql/exchange-graphcache'
-import { LoginMutation, VerifyLoginQuery, VerifyLoginDocument, RegisterMutation, RegisterDocument } from "../generated/graphql";
-import { updateQuery } from './updateQuery'
+import { LoginMutation, RegisterDocument, RegisterMutation, VerifyLoginDocument, VerifyLoginQuery } from "../generated/graphql";
+import { updateQuery } from './updateQuery';
 
 export const urqlClient = (ssrExchange: any) => ({
     url: "http://localhost:8080/graphql",
@@ -20,20 +19,17 @@ export const urqlClient = (ssrExchange: any) => ({
                         () => ({ verifyLogin: null })
                     )
                 },
-                createuser: (_result, args, cache, info) => {
+                register: (_result, args, cache, info) => {
                     updateQuery<RegisterMutation, VerifyLoginQuery>(
                         cache,
-                        { query: RegisterDocument },
+                        { query: VerifyLoginDocument },
                         _result,
                         (result, query) => {
-                            console.log(result);
-                            if(result.createUser){
-                                if (result.createUser.errors) {
-                                    return query;
-                                } else {
-                                    return {
-                                        verifyLogin: result.createUser.user
-                                    }
+                            if (result.register.errors) {
+                                return query;
+                            } else {
+                                return {
+                                    verifyLogin: result.register.user
                                 }
                             }
                         }
