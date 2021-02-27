@@ -1,8 +1,7 @@
-import { User } from './../entities/User';
-import { Arg, Ctx, Query, Resolver, ID, Mutation, InputType, Field, ObjectType } from 'type-graphql';
+import argon2 from 'argon2';
+import { Arg, Ctx, Field, ID, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
 import { ORMContext } from '../types';
-import argon2 from 'argon2'
-import e from 'express';
+import { User } from './../entities/User';
 
 // TO DO Mover a otro archivo
 @ObjectType()
@@ -28,27 +27,21 @@ class UserResponse {
 export class UserResolver {
 
     @Query(() => User, {nullable: true})
-    async verifyLogin(@Ctx() {req, em}: ORMContext){
+    verifyLogin(@Ctx() {req} : ORMContext){
         if(!req.session.userID){
             return null
         }
-        const user = await em.findOne(User, {id:req.session.userID})
-        return user;
+        return User.findOne({id: req.session.userID})
     }
 
     @Query(() => [User])
-    users(
-        @Ctx() { em }: ORMContext
-    ): Promise<User[]> {
-        return em.find(User, {})
+    users(): Promise<User[]> {
+        return User.find();
     }
 
     @Query(() => User)
-    user(
-        @Arg('id', () => ID) id: number,
-        @Ctx() { em }: ORMContext
-    ): Promise<User> {
-        return em.findOneOrFail(User, { id });
+    user(@Arg('id', () => ID) id: number) : Promise<User | undefined> {
+        return User.findOne(id);
     }
 
     @Mutation(() => UserResponse)
@@ -56,7 +49,7 @@ export class UserResolver {
         @Arg('name', () => String) name: string,
         @Arg('email', () => String) email: string,
         @Arg('password', () => String) password: string,
-        @Ctx() { em, req }: ORMContext
+        @Ctx() { req }  : ORMContext
     ): Promise<UserResponse> {
         
         const emailT = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
@@ -82,10 +75,10 @@ export class UserResolver {
         }
 
         const hash = await argon2.hash(password);
-        const user = em.create(User, { name: name, email: email, password: hash });
+        const user = User.create({email: email, name: name, password: hash});
         
         try{
-            await em.persistAndFlush(user)
+            await user.save();
         } catch(error){
             if(error.code == "ER_DUP_ENTRY") {
                 return {
@@ -105,32 +98,33 @@ export class UserResolver {
         return {user};
     }
 
-    @Mutation(() => User)
+    // TO DO Refactor
+    /*@Mutation(() => User)
     async updateUser(
         @Arg('id', () => ID) id: number,
         @Arg('name', () => String, { nullable: true }) name: string,
         @Arg('email', () => String, { nullable: true }) email: string,
-        @Arg('password', () => String, { nullable: true }) password: string,
-        @Ctx() { em }: ORMContext
-    ): Promise<User> {
+        @Arg('password', () => String, { nullable: true }) password: string
+    ): Promise<User | undefined> {
         const hash = await argon2.hash(password);
-        const user = await em.findOneOrFail(User, { id });
-
+        const user = await User.findOne({ id });
+        
         if (typeof name !== undefined) { user.name = name }
         if (typeof email !== undefined) { user.email = email }
         if (typeof password !== undefined) { user.password = hash }
+
         await em.persistAndFlush(user);
 
         return user;
-    }
+    }*/
 
     @Mutation(() => UserResponse)
     async login(
         @Arg('email', () => String) email: string,
         @Arg('password', () => String) password: string,
-        @Ctx() { em, req }: ORMContext
+        @Ctx() {req }: ORMContext
     ): Promise<UserResponse> {
-        const user = await em.findOne(User, { email: email })
+        const user = await User.findOne({where: {email: email}})
         if (!user) {
             return {
                 errors: [

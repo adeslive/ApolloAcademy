@@ -1,12 +1,18 @@
 import { Header } from '../components/Header';
 import { withUrqlClient } from 'next-urql';
 import { urqlClient } from '../utils/urqlClient';
+import { Container, Flex, Box } from '@chakra-ui/layout';
+import {Input} from '@chakra-ui/react'
 
 const Home = () => {
   return (
     <>
       <Header/>
-      <h1>Hello world</h1>
+      <Container m={2}>
+        <Box>
+          
+        </Box>
+      </Container>
     </>
   )
 }

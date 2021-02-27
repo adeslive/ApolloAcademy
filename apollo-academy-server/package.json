@@ -15,33 +15,32 @@
     "@types/bluebird": "^3.5.33",
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.11",
+    "@types/express-session": "^1.17.3",
     "@types/node": "^14.14.31",
+    "@types/passport": "^1.0.6",
+    "@types/passport-facebook": "^2.1.10",
+    "@types/session-file-store": "^1.2.1",
     "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
+    "typeorm": "^0.2.31",
     "typescript": "^4.1.5"
   },
   "dependencies": {
-    "@mikro-orm/cli": "^4.4.4",
-    "@mikro-orm/core": "^4.4.3",
-    "@mikro-orm/migrations": "^4.4.3",
-    "@mikro-orm/mysql": "^4.4.3",
-    "@types/express-session": "^1.17.3",
-    "@types/session-file-store": "^1.2.1",
+    "@types/jsonwebtoken": "^8.5.0",
     "apollo-server-express": "^2.21.0",
     "argon2": "^0.27.1",
+    "connect-ensure-login": "^0.1.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "graphql": "^15.5.0",
+    "graphql-passport": "^0.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "session-file-store": "^1.5.0",
     "type-graphql": "^1.1.1"
-  },
-  "mikro-orm": {
-    "useTsNode": true,
-    "configPaths": [
-      "./src/config/micro-orm.config.ts",
-      "./dist/config/micro-orm.config.js"
-    ]
   }
 }

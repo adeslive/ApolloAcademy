@@ -12,8 +12,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
 };
 
 export type Query = {
@@ -30,18 +28,16 @@ export type QueryUserArgs = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['Int'];
-  name: Scalars['ID'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
   email: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
-
 
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: UserResponse;
-  updateUser: User;
   login: UserResponse;
   logout: Scalars['Boolean'];
 };
@@ -51,14 +47,6 @@ export type MutationCreateUserArgs = {
   password: Scalars['String'];
   email: Scalars['String'];
   name: Scalars['String'];
-};
-
-
-export type MutationUpdateUserArgs = {
-  password?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
 };
 
 

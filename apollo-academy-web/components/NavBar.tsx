@@ -1,14 +1,17 @@
 import { Box, Flex, Link } from '@chakra-ui/layout';
-import React from 'react';
+import React, { useState } from 'react';
 import NextLink from 'next/link'
 import { useLogoutMutation, useVerifyLoginQuery } from '../generated/graphql';
-import { Button } from '@chakra-ui/react';
+import { Button, Input } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { SearchIcon } from '@chakra-ui/icons';
 
 interface navbarProps { }
 
 export const NavBar: React.FC<navbarProps> = ({ }) => {
     const [{ data, fetching }] = useVerifyLoginQuery();
     const [{ fetching: fetchingLogout }, logout] = useLogoutMutation();
+    const [focusSearch, setfocusSearch] = useState(false);
 
     let body = null;
 
@@ -35,8 +38,12 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
     }
 
     return (
-        <Flex p={4} bg={"#383d6e"}>
-            <Box ml={"auto"} color="white">
+        <Flex p={4} bg={"#383d6e"} onMouseEnter={() => setfocusSearch(true)} onMouseLeave={() => setfocusSearch(false)}>
+            <Flex color="white">
+                <SearchIcon my={"auto"} mr={2} cursor={"pointer"}/>
+                <Input type={"search"} _focus={{borderBottom: "1px", borderBottomColor: "white"}} width={"100%"} border={"transparent"} rounded={"0px"} borderRadius={"1px"} placeholder="Busqueda"/>
+            </Flex>
+            <Box ml={"auto"} my={"auto"} color="white">
                 {body}
             </Box>
         </Flex>

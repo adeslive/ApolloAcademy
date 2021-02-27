@@ -26,6 +26,7 @@ export const urqlClient = (ssrExchange: any) => ({
                         { query: RegisterDocument },
                         _result,
                         (result, query) => {
+                            console.log(result);
                             if(result.createUser){
                                 if (result.createUser.errors) {
                                     return query;
