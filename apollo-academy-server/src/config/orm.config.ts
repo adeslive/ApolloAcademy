@@ -9,10 +9,10 @@ import { Course } from '../entities/Course';
 import { Language } from '../entities/Language';
 
 export default {
-    type: 'mysql',
+    type: 'postgres',
     database: 'apolloacademy',
-    username: 'root',
-    password: '',
+    username: 'postgres',
+    password: '12345',
     logging: true,
     synchronize: true,
     entities: [

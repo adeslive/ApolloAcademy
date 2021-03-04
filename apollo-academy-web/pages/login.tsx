@@ -8,6 +8,8 @@ import Layout from '../components/Layout';
 import { useLoginMutation } from '../generated/graphql';
 import ErrorMap from '../utils/error-map';
 import { urqlClient } from '../utils/urqlClient';
+import NextLink from 'next/link';
+import { Link } from "@chakra-ui/react";
 
 interface loginProps {}
 
@@ -40,6 +42,9 @@ const Login : React.FC<loginProps>  = ({}) => {
                     </Form>
                 )}
             </Formik>
+            <NextLink href="/restorepassword" >
+                <Link color="teal.500">Olvidaste tu contraseña</Link>
+            </NextLink>
         </Layout>
     );
 }
