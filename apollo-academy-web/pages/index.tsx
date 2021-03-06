@@ -1,4 +1,5 @@
 import { Header } from '../components/Header';
+import { Footer } from '../components/footer/Footer';
 import { withUrqlClient } from 'next-urql';
 import { urqlClient } from '../utils/urqlClient';
 import { Container, Box, Stack, Center } from '@chakra-ui/layout';
@@ -114,8 +115,17 @@ const Home = () => {
               </Text>
             </Flex>
           </Card>
+          <Card>
+            <Flex alignItems="center">
+              <Image w="64px" h="64px" border="black" src="stars.jpg" rounded="32px 32px" />
+              <Text fontSize="md" ml="2rem">
+                Un nuevo año para nuevas experiencias y nuevos sueños, matricúlate en nuestros cursos, no solo es un idioma, es cultura, conocimiento, gastronomía y motivación, un idioma nuevo siempre será un plus.
+              </Text>
+            </Flex>
+          </Card>
         </SimpleGrid>
       </Layout>
+      <Footer />
     </>
   )
 }
