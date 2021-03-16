@@ -1,5 +1,5 @@
-mutation restorepassword($email: String!) {
-  restorepassword(email: $email) {
+mutation getcode($email: String!) {
+  getCode(email:$email) {
     errors {
       field
       message

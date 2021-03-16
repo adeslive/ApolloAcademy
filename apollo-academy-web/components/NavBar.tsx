@@ -3,6 +3,7 @@ import { Box, Flex, Link } from '@chakra-ui/layout';
 import { Button, Input } from '@chakra-ui/react';
 import { useViewportScroll } from 'framer-motion';
 import NextLink from 'next/link';
+import router from 'next/router';
 import React, { useState } from 'react';
 import { useLogoutMutation, useVerifyLoginQuery } from '../generated/graphql';
 
@@ -15,6 +16,10 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
     
     const {scrollY, scrollYProgress} = useViewportScroll();
     
+    const logoutPage = () => {
+        logout();
+        router.push('/');
+    }
     
     let body = null;
     if (fetching) {
@@ -34,7 +39,7 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
         body = (
             <Flex>
                 <Box mr={2}>{data.verifyLogin.name}</Box>
-                <Button variant="link" onClick={() => { logout() }}>Cerrar sesión</Button>
+                <Button variant="link" onClick={() => { logoutPage() }}>Cerrar sesión</Button>
             </Flex>
         );
     }

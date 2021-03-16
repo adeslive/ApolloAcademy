@@ -13,11 +13,12 @@ export class Teacher extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
+    @Field(() => User)
     @OneToOne(() => User)
     @JoinColumn()
     user!: User;
 
-    @ManyToOne(() => Coordinator, coordinator => coordinator.teachers)
+    @ManyToOne(() => Coordinator, coordinator => coordinator.teachers, {nullable: true})
     coordinator!: Coordinator;
 
     @OneToMany(() => VirtualClassroom, virtualclassroom => virtualclassroom.teacher)

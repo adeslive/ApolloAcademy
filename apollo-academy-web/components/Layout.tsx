@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/layout';
 import React from 'react';
 
 interface LayoutProps {
-    size: string;
+    size?: string;
 }
 
 const Layout : React.FC<LayoutProps> = ({children, ...props}) => {

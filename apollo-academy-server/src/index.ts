@@ -1,15 +1,22 @@
+import { Course } from './entities/Course';
+import { Teacher } from './entities/Teacher';
+import { CourseResolver } from './resolvers/CourseResolver';
 import "reflect-metadata";
 
-import { FacebookUser } from './entities/FacebookUser';
+import { Oauth } from './entities/Oauth';
 import { ApolloServer } from 'apollo-server-express';
 import { User } from './entities/User';
 
 import express from 'express';
-import session, { Cookie } from 'express-session';
+import session from 'express-session';
+import Stripe from 'stripe';
 
 //OAuth2
 import passport from 'passport';
 import * as FacebookStrategy from 'passport-facebook';
+import * as GoogleStrategy from 'passport-google-oauth';
+
+import * as nodemailer from 'nodemailer';
 
 //Middleware
 import cors from 'cors';
@@ -25,54 +32,99 @@ import { UserResolver } from './resolvers/UserResolver';
 // Configs
 import ormConfig from './config/orm.config';
 import fileStoreConfig from "./config/file-store.config";
-import { createTokens } from "./auth";
+import { PaymentResolver } from "./resolvers/PaymentResolver";
 
 const crypto = require('crypto');
+import faker from 'faker';
 
 const main = async () => {
 
     const conn = await createConnection(ormConfig);
 
-    // Conectar a DB y correr migraciones
-    // const orm = await MikroORM.init(microConfig);
-    // await orm.getMigrator().up();
+    const stripe = new Stripe(
+        'sk_test_51IVNrmI4W0jH35I3rLh5iSYigztvWY2yzGtudpkL6V0WXx5KhXBaO2ltuv1poTrvaeJACOUgflsNJqFjeQ4aV9UE00bhYAyvwH',
+        {
+            apiVersion: '2020-08-27',
+            typescript: true
+        }
+    );
+
+    let transport = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+            user: "apolloacademyedu@gmail.com", // generated ethereal user
+            pass: "_No_More_Heroes091!", // generated ethereal password
+        },
+    });
 
     // Iniciar Server ExpressJS
     const app = express();
 
+    passport.use(new GoogleStrategy.OAuth2Strategy({
+        clientID: "884136061002-v6u64o0fgocg8c4v16tvkfnpidv6le3u.apps.googleusercontent.com",
+        clientSecret: "2AchozudAaVa6ftf_cKbLEtg",
+        callbackURL: "http://localhost:8080/google/callback",
+    }, async (accessToken, refreshToken, profile, done) => {
+
+        const { id, displayName } = profile;
+        const googleUsers = await Oauth.findOne({ remote_id: id });
+
+        if (!googleUsers) {
+            const hash = await argon2.hash(crypto.randomBytes(4));
+
+            const guser = new Oauth();
+            guser.remote_id = id;
+            guser.save();
+
+            const user = new User();
+            user.name = displayName;
+            user.password = hash;
+            user.oauth = guser;
+            user.save();
+
+            done(null, guser)
+        } else {
+            done(null, googleUsers)
+        }
+    }));
 
     passport.use(new FacebookStrategy.Strategy({
         clientID: "471175010576407",
         clientSecret: "c061c9c973e44e932633ec6f3b01cc15",
         callbackURL: "http://localhost:8080/auth/facebook/callback",
     }, async (accessToken, refreshToken, profile, done) => {
-        
-        const {id, displayName} = profile;
-        const fbusers = await FacebookUser.findOne({where: {facebook: id}})
 
-        if(!fbusers){
+        const { id, displayName } = profile;
+        const fbusers = await Oauth.findOne({ where: { remote_id: id } })
+
+        if (!fbusers) {
             const hash = await argon2.hash(crypto.randomBytes(4));
-            const user = await User.create({name: displayName, password:hash});
-            user.save();
-            
-            const fbuser = new FacebookUser()
-            fbuser.user = user;
-            fbuser.facebook = id;
+
+            const fbuser = new Oauth();
+            fbuser.remote_id = id;
             fbuser.save();
+
+            const user = new User();
+            user.name = displayName;
+            user.password = hash;
+            user.oauth = fbuser;
+            user.save();
+
             done(null, fbuser)
-        } else{
+        } else {
             done(null, fbusers)
         }
-        
+
     }));
 
-    passport.serializeUser(function(user : any, done) {
-        done(null, user.id);
-      });
-      
-    passport.deserializeUser(function(id : any, done) {
-        console.log(id)
-        User.findByIds(id);
+    passport.serializeUser(function (user: any, done) {
+        done(null, user);
+    });
+
+    passport.deserializeUser(function (user: any, done) {
+        done(null, user);
     });
 
     app.use(passport.initialize())
@@ -101,35 +153,38 @@ const main = async () => {
         saveUninitialized: false
     }));
 
-    
+
     // Server Graphql
     const apollo = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver],
+            resolvers: [UserResolver, PaymentResolver, CourseResolver],
             validate: false,
         }),
-        context: ({ req, res }) => ({ req, res })
+        context: ({ req, res }) => ({ req, res, transport, stripe })
     });
 
     // Iniciar GraphQL, puedes ir a localhost:PUERTO/graphql 
     // para entrar en el sandbox
     apollo.applyMiddleware({ app, cors: false });
 
-    app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email']}));
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        session: true}),  async (req, res, next) => {
-        
-        res.redirect(`http://localhost:8080`)
+        session: true
+    }), async (req, res, next) => {
+        res.redirect(`http://localhost:3000/home`)
+    });
+
+    app.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+    app.get('/google/callback', passport.authenticate('google', {
+        session: true
+    }), async (req, res, next) => {
+        res.redirect(`http://localhost:3000/home`)
     });
 
     // ExpressJS escucha en este puerto
     app.listen(8080, () => {
 
     })
-
-    app.listen(80, () => {
-
-    })  
 }
 
 main().catch((err) => {

@@ -5,19 +5,19 @@ import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, Pri
 
 @ObjectType()
 @Entity()
-export class FacebookUser extends BaseEntity{
+export class Oauth extends BaseEntity{
 
     @Field(() => ID)
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @OneToOne(() => User)
-    @JoinColumn()
+    @Field(() => User)
+    @OneToOne(() => User, user => user.oauth)
     user!: User;
 
     @Field(() => String)
-    @Column({type: "varchar"})
-    facebook!: string;
+    @Column({type: "varchar", unique: true})
+    remote_id!: string;
 
     @Field(() => Boolean)
     @Column({type: "boolean", default: true})

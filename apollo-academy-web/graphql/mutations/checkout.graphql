@@ -1,0 +1,10 @@
+mutation createCheckoutSession
+{
+  createCheckout(classroom:1) {
+    errors {
+      field
+      message
+    }
+    stripeID
+  }
+}

@@ -5,39 +5,36 @@ import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import InputField from '../components/InputField';
 import Layout from '../components/Layout';
+import { useGetcodeMutation } from '../generated/graphql';
 import ErrorMap from '../utils/error-map';
 import { urqlClient } from '../utils/urqlClient';
-//import { userestorepasswordMutation } from '../generated/graphql';
 
-interface restorepasswordProps {}
+interface restorepasswordProps { }
 
 
-const restorepassword : React.FC<restorepasswordProps>  = ({}) => {
+const restorepassword: React.FC<restorepasswordProps> = ({ }) => {
     const router = useRouter();
-    //const [, restorepassword] = userestorepasswordMutation();
-    const sendcode= () =>{
-        router.push('/coderestore');
-      }
-    return(
+    const [, getCode] = useGetcodeMutation();
+
+    return (
         <Layout>
             <Formik
-                initialValues={{email:""}}
-                /*onSubmit={async (values, {setErrors}) => {
-                    const res = await restorepassword(values);
-                    if(res.data?.restorepassword.errors) {
-                        setErrors(ErrorMap(res.data?.restorepassword.errors));
-                    }else if(res.data?.restorepassword.user){
-                        router.push('/');
-                    }                    
-                }}*/
-            > 
-                {({values}) => (
+                initialValues={{ email: "" }}
+                onSubmit={async (values, { setErrors }) => {
+                    const res = await getCode(values);
+                    if (res.data?.getCode.errors) {
+                        setErrors(ErrorMap(res.data?.getCode.errors));
+                    } else if (res.data?.getCode.user) {
+                        router.push({ pathname: "/coderestore", query: { email: values.email } });
+                    }
+                }}
+            >
+                {({ values }) => (
                     <Form>
                         <Box mt={4}>
-                            <InputField name="email" label="Correo Electrónico" placeholder="juan@ejemplo.com" type="email"/>
+                            <InputField name="email" label="Correo Electrónico" placeholder="juan@ejemplo.com" type="email" />
                         </Box>
-                        <Button mt={4} type="button" colorScheme="teal">Enviar Código</Button>
-
+                        <Button mt={4} type="submit" colorScheme="teal">Enviar Código</Button>
                     </Form>
                 )}
             </Formik>

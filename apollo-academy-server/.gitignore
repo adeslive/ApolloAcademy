@@ -1,4 +1,5 @@
 /node_modules
 /yarn.lock
-/package.lock
+/package-lock.json
 /dist
+/src/config/orm.config.ts

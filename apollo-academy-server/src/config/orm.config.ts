@@ -4,27 +4,28 @@ import { Student } from './../entities/Student';
 import { Coordinator } from './../entities/Coordinator';
 import typeorm from 'typeorm';
 import { User } from '../entities/User';
-import { FacebookUser } from '../entities/FacebookUser';
+import { Oauth } from '../entities/Oauth';
 import { Course } from '../entities/Course';
 import { Language } from '../entities/Language';
+import { Receipt } from '../entities/Receipt';
 
 export default {
-    type: 'postgres',
+    type: 'mysql',
     database: 'apolloacademy',
-    username: 'postgres',
-    password: '12345',
+    username: 'root',
+    password: '',
     logging: true,
     synchronize: true,
     entities: [
         User, 
-        FacebookUser, 
+        Oauth, 
         Course, 
         Language, 
         Coordinator, 
-        Course, 
-        FacebookUser, 
+        Course,
         Student, 
         Teacher,
+        Receipt,
         VirtualClassroom
     ]
 } as Parameters<typeof typeorm.createConnection>[0];

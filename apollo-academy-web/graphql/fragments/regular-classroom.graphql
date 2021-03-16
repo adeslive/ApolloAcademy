@@ -1,0 +1,11 @@
+fragment RegularClassroom on VirtualClassroom {
+    id
+    teacher {
+        id
+        user {
+            ...RegularUser
+        }
+    }
+    capacity
+    link
+}

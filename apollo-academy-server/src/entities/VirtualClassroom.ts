@@ -1,19 +1,30 @@
-import { BaseEntity, Column, Entity, ManyToOne } from 'typeorm';
+import { Float } from 'type-graphql';
+import { ObjectType, ID, Field, Int } from 'type-graphql';
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Course } from './Course';
 import { Teacher } from './Teacher';
 
+@ObjectType()
 @Entity()
-export class VirtualClassroom extends BaseEntity{
+export class VirtualClassroom extends BaseEntity {
 
-    @ManyToOne(() => Teacher, teacher => teacher.classrooms, {primary: true})
+    @Field(() => ID)
+    @PrimaryGeneratedColumn()
+    id!: number;
+
+    @Field(() => Teacher)
+    @ManyToOne(() => Teacher, teacher => teacher.classrooms, { primary: true })
     teacher!: Teacher;
 
-    @ManyToOne(() => Course, course => course.classrooms, {primary: true})
+    @Field(() => Course)
+    @ManyToOne(() => Course, course => course.classrooms, { primary: true })
     course!: Course;
 
-    @Column({type: "int"})
+    @Field(() => Int)
+    @Column({ type: "int" })
     capacity!: number;
 
-    @Column({type:"varchar"})
+    @Field(() => String)
+    @Column({ type: "varchar" })
     link!: string;
 }

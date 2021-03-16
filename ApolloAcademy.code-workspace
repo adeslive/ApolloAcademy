@@ -7,5 +7,21 @@
 			"path": "apollo-academy-server"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"sqltools.connections": [
+			{
+				"mysqlOptions": {
+					"authProtocol": "default"
+				},
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 3306,
+				"askForPassword": true,
+				"driver": "MySQL",
+				"name": "SQL",
+				"database": "apolloacademy",
+				"username": "root"
+			}
+		]
+	}
 }

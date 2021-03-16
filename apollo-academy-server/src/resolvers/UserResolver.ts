@@ -1,37 +1,38 @@
+import { Oauth } from './../entities/Oauth';
 import argon2 from 'argon2';
 import { Arg, Ctx, Field, ID, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
-import { ORMContext } from '../types';
+import { ORMContext, CResponse, ErrorField } from '../types';
 import { User } from './../entities/User';
+import { randomBytes } from 'crypto';
+
+// Verifican email y contraseña
+const emailT = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
+const passNumT = /^([^\.]|[]).+[0-9]*([^\.]|$)/g
 
 // TO DO Mover a otro archivo
-@ObjectType()
-class ErrorField {
-    @Field(() => String)
-    field!: string;
 
-    @Field(() => String)
-    message!: string;
-}
-
-@ObjectType()
-class UserResponse {
-
-    @Field(() => [ErrorField], { nullable: true })
-    errors?: ErrorField[];
-
-    @Field(() => User, { nullable: true })
-    user?: User;
-}
 
 @Resolver()
 export class UserResolver {
 
-    @Query(() => User, {nullable: true})
-    verifyLogin(@Ctx() {req} : ORMContext){
-        if(!req.session.userID){
-            return null
+    @Query(() => User, { nullable: true })
+    async verifyLogin(@Ctx() { req }: ORMContext) {
+        console.log(req.session.passport?.user.remote_id);
+        if (req.session.userID) {
+            return User.findOne({ id: req.session.userID })
+        } else if (req.session.passport?.user) {
+            /*
+            return User
+            .createQueryBuilder("user")
+            .leftJoinAndSelect("user.oauth", "oauth")
+            .where("oauth.remote_id = :id", { id: req.session.passport.user.remote_id })
+            .getOne();*/
+            const oauth = await Oauth.findOne({ where: { remote_id: req.session.passport?.user.remote_id } });
+            if (oauth) {
+                return User.findOne({ where: { oauth: oauth.id } });
+            }
         }
-        return User.findOne({id: req.session.userID})
+        return null;
     }
 
     @Query(() => [User])
@@ -40,49 +41,136 @@ export class UserResolver {
     }
 
     @Query(() => User)
-    user(@Arg('id', () => ID) id: number) : Promise<User | undefined> {
+    user(@Arg('id', () => ID) id: number): Promise<User | undefined> {
         return User.findOne(id);
     }
 
-    @Mutation(() => UserResponse)
+    @Mutation(() => CResponse)
+    async getCode(
+        @Arg('email', () => String) email: string,
+        @Ctx() { req, transport }: ORMContext
+    ): Promise<CResponse> {
+
+        const codigo = randomBytes(2).toString('hex');
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) {
+            return {
+                errors: [{
+                    field: "email",
+                    message: "El usuario no existe"
+                }]
+            }
+        }
+
+        await transport.sendMail({
+            from: '"Apollo Academy" <apolloacademyedu@gmail.com>', // sender address
+            to: email, // list of receivers
+            subject: "ApolloAcademy - Recuperar contraseña", // Subject line
+            text: codigo, // plain text body
+            html: `<b>Codigo: ${codigo}</b>`, // html body
+        });
+
+        user.password_reset = codigo;
+        user.save();
+
+        return { user };
+    }
+
+
+    @Mutation(() => CResponse)
+    async restore(
+        @Arg('code', () => String) code: string,
+        @Arg('email', () => String) email: string,
+        @Ctx() { req, stripe }: ORMContext
+    ): Promise<CResponse> {
+        
+        // TO DO cambiar codigo, generar numeros
+        const user = await User.findOne({ where: { email: email } });
+        if (user && user.password_reset == code) {
+            user.password_reset = "-1";
+            user.save();
+            return { user };   
+        }
+
+        return {
+            errors: [{
+                field: "code",
+                message: "El codigo es incorrecto"
+            }]
+        };
+    }
+
+    @Mutation(() => CResponse)
+    async changePassword(
+        @Arg('email', () => String) email: string,
+        @Arg('password', () => String) password: string,
+        @Ctx() { req }: ORMContext
+    ): Promise<CResponse> {
+
+        if (!password || password.length < 8 || !passNumT.test(password)) {
+            return {
+                errors: [{
+                    field: "password",
+                    message: "La contraseña debe de tener al menos 8 digitos y 1 numero"
+                }]
+            };
+        }
+
+        // TO DO cambiar codigo, generar numeros
+        const user = await User.findOne({ where: { email: email, password_reset: "-1" } });
+        if (user) {
+            user.password = await argon2.hash(password);
+            user.password_reset = "";
+            user.save();
+            return { user };   
+        }
+
+        return {
+            errors: [{
+                field: "email",
+                message: "El usuario no existe"
+            }]
+        };
+    }
+
+    @Mutation(() => CResponse)
     async register(
         @Arg('name', () => String) name: string,
         @Arg('email', () => String) email: string,
         @Arg('password', () => String) password: string,
-        @Ctx() { req }  : ORMContext
-    ): Promise<UserResponse> {
-        
-        const emailT = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
-        const passNumT = /^([^\.]|[]).+[0-9]*([^\.]|$)/g
-        let errors : ErrorField[] = [];
+        @Ctx() { req }: ORMContext
+    ): Promise<CResponse> {
 
-        if(!email || !emailT.test(email)){
+      
+        let errors: ErrorField[] = [];
+
+        if (!email || !emailT.test(email)) {
             errors.push({
                 field: "email",
                 message: "El correo es invalido"
             });
         }
 
-        if (!password || password.length < 6 || !passNumT.test(password)){
+        if (!password || password.length < 8 || !passNumT.test(password)) {
             errors.push({
                 field: "password",
-                        message: "La contraseña debe de tener al menos 8 digitos y 1 numero"
+                message: "La contraseña debe de tener al menos 8 digitos y 1 numero"
             });
         }
 
-        if(errors.length > 0){
-            return {errors}
+        if (errors.length > 0) {
+            return { errors }
         }
 
         const hash = await argon2.hash(password);
-        const user = User.create({email: email, name: name, password: hash});
-        
-        try{
+        const user = User.create({ email: email, name: name, password: hash });
+
+        try {
             await user.save();
-        } catch(error){
-            if(error.code == "ER_DUP_ENTRY") {
+        } catch (error) {
+            if (error.code == "ER_DUP_ENTRY") {
                 return {
-                    errors : [
+                    errors: [
                         {
                             field: "email",
                             message: "Este correo ya está registrado"
@@ -95,7 +183,7 @@ export class UserResolver {
         // Envia cookie para iniciar sesion al registrarse
         req.session.userID = user.id;
 
-        return {user};
+        return { user };
     }
 
     // TO DO Refactor
@@ -118,13 +206,13 @@ export class UserResolver {
         return user;
     }*/
 
-    @Mutation(() => UserResponse)
+    @Mutation(() => CResponse)
     async login(
         @Arg('email', () => String) email: string,
         @Arg('password', () => String) password: string,
-        @Ctx() {req }: ORMContext
-    ): Promise<UserResponse> {
-        const user = await User.findOne({where: {email: email}})
+        @Ctx() { req }: ORMContext
+    ): Promise<CResponse> {
+        const user = await User.findOne({ where: { email: email } })
         if (!user) {
             return {
                 errors: [
@@ -137,7 +225,7 @@ export class UserResolver {
         }
 
         const valid = await argon2.verify(user.password, password);
-        if(!valid){
+        if (!valid) {
             return {
                 errors: [
                     {
@@ -156,13 +244,13 @@ export class UserResolver {
     }
 
     @Mutation(() => Boolean)
-    async logout(@Ctx() {req, res}: ORMContext){
-        
+    async logout(@Ctx() { req, res }: ORMContext) {
+
         return new Promise(response => req.session.destroy(err => {
-            if(err){
+            if (err) {
                 console.error(err);
                 response(false)
-                return 
+                return
             }
 
             res.clearCookie("aid");

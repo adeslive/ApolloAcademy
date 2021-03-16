@@ -1,0 +1,18 @@
+fragment RegularCourse on Course {
+    id
+    name
+    description
+    active
+    createdAt
+    price
+
+    language {
+        name
+        code
+        active
+    }
+    
+    classrooms {
+        ...RegularClassroom
+    }
+}
