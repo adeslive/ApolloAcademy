@@ -161,7 +161,7 @@ const Home = () => {
           </Card>
           <Card>
             <Flex alignItems="center">
-              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="mundo1.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Un nuevo año para nuevas experiencias y nuevos sueños, matricúlate en nuestros cursos, no solo es un idioma, es cultura, conocimiento, gastronomía y motivación, un idioma nuevo siempre será un plus.
               </Text>
@@ -169,9 +169,9 @@ const Home = () => {
           </Card>
           <Card>
             <Flex alignItems="center">
-              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="mundo2.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
-                Creemos en tus sueños, creemos en vos
+                Forma parte de nuestra academia, ¡Matriculate ya!
               </Text>
             </Flex>
           </Card>
