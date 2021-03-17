@@ -16,7 +16,7 @@ const Home = () => {
       <Layout size="big">
         <Container centerContent>
           <Stack spacing={3} marginTop={["1rem", "3rem"]}>
-            <Center><Text fontSize="6xl" color={["white", "white"]} textAlign="center">Apollo Academy</Text></Center>
+            <Center><Text fontSize="6xl" color={["white", "red"]} textAlign="center">Apollo Academy</Text></Center>
             <Center>
               <Text fontSize="1xl" color={["white", "white"]} textAlign="center" display={["none", "block"]}>Si quieres aprender los diferentes idiomas que existen en el mundo,
               ven y visitanos para ser parte del mejor aprendizaje, contamos con los mejores profesionales en lenguas
@@ -129,7 +129,7 @@ const Home = () => {
             <Flex alignItems="center">
               <Image w="64px" h="64px" border="black" src="stars.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
-                Un nuevo año para nuevas experiencias y nuevos sueños, matricúlate en nuestros cursos, no solo es un idioma, es cultura, conocimiento, gastronomía y motivación, un idioma nuevo siempre será un plus.
+                Creemos en tus sueños, creemos en vos
               </Text>
             </Flex>
           </Card>

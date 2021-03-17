@@ -25,7 +25,7 @@ export const Footer: React.FC<navbarProps> = ({ }) => {
         <SimpleGrid mt="0rem" columns={1} spacing="1rem">
             <Flex alignItems="center" mt="1rem">
               <Text fontSize="md" ml="2rem" color='#fff'>
-                Contactanos:
+                Telefono: +504 22807863
               </Text>
             </Flex>
             <Flex alignItems="center">
@@ -35,7 +35,7 @@ export const Footer: React.FC<navbarProps> = ({ }) => {
             </Flex>
             <Flex alignItems="center">
               <Text fontSize="md" ml="2rem" color='#fff'>
-                Instagram:
+                Direccion: Colonia Kennedy, Tegucigalpa Honduras
               </Text>
             </Flex>
         </SimpleGrid>
