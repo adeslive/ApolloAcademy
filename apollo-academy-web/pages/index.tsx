@@ -100,9 +100,47 @@ const Home = () => {
           </Stack>
         </Stack>
 
-        <SimpleGrid columns={3} spacing="2rem" mt="4rem">
-          <ImageLink href="#" label="Contactanos" image="stars.jpg" />
-          <ImageLink href="#" label="Sobre Nosotros" image="stars.jpg" />
+        <Card>
+            <Flex alignItems="center">
+              <Text fontSize="md" ml="2rem">
+        
+              MISION
+              </Text>
+            </Flex>
+          </Card>
+
+        <Card>
+            <Flex alignItems="center">
+              <Text fontSize="md" ml="2rem">
+        
+Somos una academia de idiomas 100% hondureña, contribuimos y trabajamos por el desarrollo del país, a través de la enseñanza de diferentes idiomas,contamos con los mejores profesionales de lenguas extranjeras en el país egresados de la Universidad Nacional Autónoma de Honduras, para que amigos, compañeros, estudiantes, familias, personas en general, puedan aprender nuevos idiomas, fomentando la paz, armonía y la unidad de toda la población.
+
+              </Text>
+            </Flex>
+          </Card>
+
+          <Card>
+            <Flex alignItems="center">
+              <Text fontSize="md" ml="2rem">
+        
+              VISION
+              </Text>
+            </Flex>
+          </Card>
+
+        <Card>
+            <Flex alignItems="center">
+              <Text fontSize="md" ml="2rem">
+        
+              Ser una empresa líder en el aprendizaje de nuevos idiomas a nivel nacional, por medio de la tecnología unir a todas las personas y formar una sociedad desarrollada.
+
+              </Text>
+            </Flex>
+          </Card>
+
+        <SimpleGrid columns={2} spacing="2rem" mt="4rem">
+          <ImageLink href="#" label="Contactanos" image="Mundo.jpg" />
+          <ImageLink href="#" label="Sobre Nosotros" image="Mundo.jpg" />
           <ImageLink href="#" label="Cursos" image="stars.jpg" />
           <ImageLink href="#" label="Idiomas" image="stars.jpg" />
           <ImageLink href="#" label="Sistemas para academias" image="stars.jpg" />
@@ -111,7 +149,7 @@ const Home = () => {
         <SimpleGrid mt="4rem" columns={2} spacing="2rem">
           <Card>
             <Flex alignItems="center" mt="1rem">
-              <Image w="64px" h="64px" border="black" src="stars.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Creemos en tus sueños, creemos en vos, matricúlate en tu idioma favorito, cupos disponibles en italiano, japonés e inglés.
               </Text>
@@ -119,7 +157,7 @@ const Home = () => {
           </Card>
           <Card>
             <Flex alignItems="center">
-              <Image w="64px" h="64px" border="black" src="stars.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Un nuevo año para nuevas experiencias y nuevos sueños, matricúlate en nuestros cursos, no solo es un idioma, es cultura, conocimiento, gastronomía y motivación, un idioma nuevo siempre será un plus.
               </Text>
@@ -127,7 +165,7 @@ const Home = () => {
           </Card>
           <Card>
             <Flex alignItems="center">
-              <Image w="64px" h="64px" border="black" src="stars.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Creemos en tus sueños, creemos en vos
               </Text>

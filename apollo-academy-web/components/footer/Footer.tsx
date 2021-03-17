@@ -30,7 +30,7 @@ export const Footer: React.FC<navbarProps> = ({ }) => {
             </Flex>
             <Flex alignItems="center">
               <Text fontSize="md" ml="2rem" color='#fff'>
-                Facebook:
+                Correo: apolloacademy@gmail.com
               </Text>
             </Flex>
             <Flex alignItems="center">
