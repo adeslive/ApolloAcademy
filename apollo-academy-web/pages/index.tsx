@@ -102,7 +102,7 @@ const Home = () => {
 
         <Card>
             <Flex alignItems="center">
-              <Text fontSize="md" ml="12rem">
+              <Text fontSize="md" ml="32rem">
         
               MISION
               </Text>
