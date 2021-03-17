@@ -143,12 +143,12 @@ const Home = () => {
           </Card>
 
         <SimpleGrid columns={2} spacing="2rem" mt="4rem">
-          <ImageLink href="#" label="Contactanos" image="Mundo.jpg" />
-          <ImageLink href="#" label="Sobre Nosotros" image="Mundo.jpg" />
-          <ImageLink href="#" label="Cursos" image="stars.jpg" />
-          <ImageLink href="#" label="Idiomas" image="stars.jpg" />
-          <ImageLink href="#" label="Sistemas para academias" image="stars.jpg" />
-          <ImageLink href="#" label="Costo" image="stars.jpg" />
+          <ImageLink href="#" label="Contactanos" image="Nosotros.jpeg" />
+          <ImageLink href="#" label="Sobre Nosotros" image="logo.jpg" />
+          <ImageLink href="#" label="Cursos" image="cursos.jpg" />
+          <ImageLink href="#" label="Matrícula" image="matricula.jpg" />
+          <ImageLink href="#" label="Reportes" image="reportes.png" />
+          <ImageLink href="#" label="Costo" image="costo.png" />
         </SimpleGrid >
         <SimpleGrid mt="4rem" columns={2} spacing="2rem">
           <Card>
@@ -172,6 +172,14 @@ const Home = () => {
               <Image w="64px" h="64px" border="black" src="mundo2.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Forma parte de nuestra academia, ¡Matriculate ya!
+              </Text>
+            </Flex>
+          </Card>
+          <Card>
+            <Flex alignItems="center">
+              <Image w="64px" h="64px" border="black" src="idioma.png" rounded="32px 32px" />
+              <Text fontSize="md" ml="2rem">
+              Tu aprendizaje de idiomas esta garantizado sin importar en el nivel en que te encuentres.
               </Text>
             </Flex>
           </Card>
