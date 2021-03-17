@@ -50,7 +50,7 @@ const Home = () => {
         </Container>
         <Stack direction={["column", "row"]} spacing={["1rem", "5rem"]} marginTop={["5rem", "12rem"]} >
           <Box boxSize={["sm", "auto"]}>
-            <Image src="welcome.svg" />
+            <Image src="ilustracion2.jpg" width="750px" height="404px"/>
           </Box>
           <Stack spacing="1rem">
             <Flex>
