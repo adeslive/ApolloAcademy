@@ -129,7 +129,7 @@ const Home = () => {
             <Flex alignItems="center">
               <Image w="64px" h="64px" border="black" src="stars.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
-                Un nuevo año para nuevas experiencias y nuevos sueños, matricúlate en nuestros cursos, no solo es un idioma, es cultura, conocimiento, gastronomía y motivación, un idioma nuevo siempre será un plus.
+                Creemos en tus sueños, creemos en vos
               </Text>
             </Flex>
           </Card>
