@@ -70,7 +70,7 @@ const Home = () => {
 
               <Box ml="3rem">
                 <Text fontSize="2xl" color="black">
-                  Te ofrecemos cursos de Inglés, Francés, Alemán, Italiano, Japonés y muchos más.
+                  Te ofrecemos cursos de Inglés, Francés, Alemán, Italiano, Portugués.
                   Nuestros docentes son egresados de la carrera de Lenguas Extranjeras de la Universidad Nacional
                   Autónoma de Honduras.
                 </Text>
@@ -84,6 +84,16 @@ const Home = () => {
               <Box ml="3rem">
                 <Text fontSize="2xl" color="black">
                   Aprende desde casa con nuestra modalidad virtual.
+                </Text>
+              </Box>
+            </Flex>
+             <Flex>
+              <Box rounded="16px 16px" width="32px" height="32px" position="absolute" ml="-9px" mt="2px" zIndex="-1" backgroundColor="#1a1a8c" />
+              <Text fontSize="xl" color="white">4</Text>
+              <Box ml="3rem">
+                <Text fontSize="2xl" color="black">
+                Contamos con cursos de diferentes idiomas a través de nuestra página web. 
+                Te ofrecemos un mejor futuro, no te quedes sin la oportunidad de aprender ese idioma que siempre has querido 🌎 
                 </Text>
               </Box>
             </Flex>
