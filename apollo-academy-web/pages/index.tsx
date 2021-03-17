@@ -102,7 +102,7 @@ const Home = () => {
 
         <Card>
             <Flex alignItems="center">
-              <Text fontSize="md" ml="2rem">
+              <Text fontSize="md" ml="12rem">
         
               MISION
               </Text>
@@ -113,7 +113,10 @@ const Home = () => {
             <Flex alignItems="center">
               <Text fontSize="md" ml="2rem">
         
-Somos una academia de idiomas 100% hondureña, contribuimos y trabajamos por el desarrollo del país, a través de la enseñanza de diferentes idiomas,contamos con los mejores profesionales de lenguas extranjeras en el país egresados de la Universidad Nacional Autónoma de Honduras, para que amigos, compañeros, estudiantes, familias, personas en general, puedan aprender nuevos idiomas, fomentando la paz, armonía y la unidad de toda la población.
+            Somos una academia de idiomas 100% hondureña, contribuimos y trabajamos por el desarrollo del país, 
+            a través de la enseñanza de diferentes idiomas,contamos con los mejores profesionales de lenguas extranjeras en el país 
+            egresados de la Universidad Nacional Autónoma de Honduras, para que amigos, compañeros, estudiantes, familias, personas en general, 
+            puedan aprender nuevos idiomas, fomentando la paz, armonía y la unidad de toda la población.
 
               </Text>
             </Flex>
@@ -121,7 +124,7 @@ Somos una academia de idiomas 100% hondureña, contribuimos y trabajamos por el 
 
           <Card>
             <Flex alignItems="center">
-              <Text fontSize="md" ml="2rem">
+              <Text fontSize="md" ml="32rem">
         
               VISION
               </Text>
@@ -132,24 +135,25 @@ Somos una academia de idiomas 100% hondureña, contribuimos y trabajamos por el 
             <Flex alignItems="center">
               <Text fontSize="md" ml="2rem">
         
-              Ser una empresa líder en el aprendizaje de nuevos idiomas a nivel nacional, por medio de la tecnología unir a todas las personas y formar una sociedad desarrollada.
+              Ser una empresa líder en el aprendizaje de nuevos idiomas a nivel nacional, por medio de la tecnología unir a todas las personas
+                y formar una sociedad desarrollada.
 
               </Text>
             </Flex>
           </Card>
 
-        <SimpleGrid columns={3} spacing="2rem" mt="4rem">
-          <ImageLink href="#" label="Contactanos" image="contactos.jpg" />
+        <SimpleGrid columns={2} spacing="2rem" mt="4rem">
+          <ImageLink href="#" label="Contactanos" image="Mundo.jpg" />
           <ImageLink href="#" label="Sobre Nosotros" image="Mundo.jpg" />
-          <ImageLink href="#" label="Cursos" image="Mundo.jpg" />
-          <ImageLink href="#" label="Idiomas" image="Mundo.jpg" />
-          <ImageLink href="#" label="Sistemas para academias" image="Mundo.jpg" />
-          <ImageLink href="#" label="Costo" image="Mundo.jpg" />
+          <ImageLink href="#" label="Cursos" image="stars.jpg" />
+          <ImageLink href="#" label="Idiomas" image="stars.jpg" />
+          <ImageLink href="#" label="Sistemas para academias" image="stars.jpg" />
+          <ImageLink href="#" label="Costo" image="stars.jpg" />
         </SimpleGrid >
         <SimpleGrid mt="4rem" columns={2} spacing="2rem">
           <Card>
             <Flex alignItems="center" mt="1rem">
-              <Image w="64px" h="64px" border="black" src="mundo2.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Creemos en tus sueños, creemos en vos, matricúlate en tu idioma favorito, cupos disponibles en italiano, japonés e inglés.
               </Text>
@@ -157,7 +161,7 @@ Somos una academia de idiomas 100% hondureña, contribuimos y trabajamos por el 
           </Card>
           <Card>
             <Flex alignItems="center">
-              <Image w="64px" h="64px" border="black" src="mundo2.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Un nuevo año para nuevas experiencias y nuevos sueños, matricúlate en nuestros cursos, no solo es un idioma, es cultura, conocimiento, gastronomía y motivación, un idioma nuevo siempre será un plus.
               </Text>
@@ -165,7 +169,7 @@ Somos una academia de idiomas 100% hondureña, contribuimos y trabajamos por el 
           </Card>
           <Card>
             <Flex alignItems="center">
-              <Image w="64px" h="64px" border="black" src="mundo2.jpg" rounded="32px 32px" />
+              <Image w="64px" h="64px" border="black" src="Mundo.jpg" rounded="32px 32px" />
               <Text fontSize="md" ml="2rem">
                 Creemos en tus sueños, creemos en vos
               </Text>
