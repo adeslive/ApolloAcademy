@@ -2,7 +2,7 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/footer/Footer";
 import { withUrqlClient } from "next-urql";
 import { urqlClient } from "../utils/urqlClient";
-import { Container, Box, Stack, Center } from "@chakra-ui/layout";
+import { Container, Box, Stack, Center, Link } from "@chakra-ui/layout";
 import Layout from "../components/Layout";
 import { Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { ImageLink } from "../components/ImageLink";
@@ -10,7 +10,8 @@ import React from "react";
 import Card from "../components/Card";
 import { Badge } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
-
+import NextLink from 'next/link';
+import router from 'next/router';
 const Home = () => {
   return (
     <>
@@ -372,8 +373,8 @@ const Home = () => {
             <ImageLink href="#" label="Sobre Nosotros" image="logo.jpg" />
             <ImageLink href="#" label="Cursos" image="cursos.jpg" />
             <ImageLink href="#" label="Matrícula" image="matricula.jpg" />
-            <ImageLink href="#" label="Reportes" image="reportes.png" />
-            <ImageLink href="#" label="Costo" image="costo.png" />
+            <ImageLink href="/#" label="Reportes" image="reportes.png" />
+            <ImageLink href="/offers" label="Ofertas" image="costo.png" />
           </SimpleGrid>
         </Stack>
         
