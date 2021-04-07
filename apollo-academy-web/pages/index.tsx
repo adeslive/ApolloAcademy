@@ -12,7 +12,10 @@ import { Badge } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import NextLink from 'next/link';
 import router from 'next/router';
+
 const Home = () => {
+  
+
   return (
     <>
       <Header /> 

@@ -20,13 +20,20 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
         logout();
         router.push('/');
     }
+
+    const Home = () =>{
+        router.push('/Home')
+    }
     
     let body = null;
     if (fetching) {
 
     } else if (!data?.verifyLogin) {
         body = (
-            <>
+            <>  
+                <NextLink href="/" >
+                    <Link mr={2} >Apollo Academy</Link>
+                </NextLink>
                 <NextLink href="/login">
                     <Link mr={2}>Iniciar Sesión</Link>
                 </NextLink>
@@ -38,6 +45,10 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
     } else {
         body = (
             <Flex>
+                <Button marginRight="500" variant="link" onClick={() => { Home() }}>Casa</Button>
+                <Button right="450" variant="link" onClick={() => { Home() }}>Cursos</Button>
+                <Button right="400" variant="link" onClick={() => { Home() }}>Mis Cursos</Button>
+                <Button right="350" variant="link" onClick={() => { Home() }}>Historial</Button>
                 <Box mr={2}>{data.verifyLogin.name}</Box>
                 <Button variant="link" onClick={() => { logoutPage() }}>Cerrar sesión</Button>
             </Flex>
