@@ -50,9 +50,10 @@ const Register : React.FC<registerProps>  = ({}) => {
                         </Box>
                         <Stack>
                             <Button mt={4} type="submit" isLoading={isSubmitting} colorScheme="teal">Registrarse</Button>
-                            <a href="http://localhost:8080/auth/facebook"><Button mt={4} type="button" colorScheme="facebook">Iniciar con Facebook</Button></a>
-                        <a href="http://localhost:8080/google"><Button mt={4} type="button" colorScheme="gray">Iniciar con Google</Button></a>
-                    </Stack>
+                            <hr/>
+                            <a href="http://localhost:8080/auth/facebook"><Button width="100%" mt={1} type="button" colorScheme="facebook"><Image src="facebook_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Facebook</Button></a>
+                            <a href="http://localhost:8080/google"><Button width="100%" mt={1} type="button" colorScheme="gray"><Image src="gmail_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Google</Button></a>
+                        </Stack>
                     </Form>
                 )}
             </Formik>

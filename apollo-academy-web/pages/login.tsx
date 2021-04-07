@@ -9,7 +9,7 @@ import { useLoginMutation } from '../generated/graphql';
 import ErrorMap from '../utils/error-map';
 import { urqlClient } from '../utils/urqlClient';
 import NextLink from 'next/link';
-import { Link, Text, Center } from "@chakra-ui/react";
+import { Link, Text, Center, Image, Stack } from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
@@ -27,8 +27,8 @@ const Login : React.FC<loginProps>  = ({}) => {
         <Header/>
         <Box bgGradient="linear(to-r, green.200, pink.500)" position="fixed" width="100%" height="100%" >
         <Center>
-        <Box maxW="md" borderWidth="1px" borderRadius="lg" backgroundColor="white" width="100%" margin="4%" height="450px">
-        <Text fontSize="28px" fontWeight="bold" padding="25px" color="#D7933A">Iniciar Sesión</Text>
+        <Box maxW="md" borderWidth="1px" borderRadius="lg" backgroundColor="white" width="100%" margin="1%" height="520px">
+        <Text fontSize="28px" fontWeight="bold" padding="25px 25px 0 25px" color="#D7933A">Iniciar Sesión</Text>
         <Layout >
             <Formik
                 initialValues={{password:"", email:""}}
@@ -47,10 +47,13 @@ const Login : React.FC<loginProps>  = ({}) => {
                         <Box mt={4}>
                             <InputField name="password" label="Contraseña" placeholder="Contraseña" type="password"/>
                         </Box>
-                        <Button mt={4} type="submit"  isLoading={isSubmitting} colorScheme="teal">Ingresar</Button>
-                        <a href="http://localhost:8080/auth/facebook"><Button mt={4} type="button" colorScheme="facebook">Iniciar con Facebook</Button></a>
-                        <a href="http://localhost:8080/google"><Button mt={4} type="button" colorScheme="gray">Iniciar con Google</Button></a>
-                    </Form>
+                        <Stack>
+                            <Button mt={4} type="submit"  isLoading={isSubmitting} colorScheme="teal">Ingresar</Button>
+                            <hr/>
+                            <a href="http://localhost:8080/auth/facebook"><Button width="100%" mt={2} type="button" colorScheme="facebook"><Image src="facebook_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Facebook</Button></a>
+                            <a href="http://localhost:8080/google"><Button width="100%" mt={2} type="button" colorScheme="gray"><Image src="gmail_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Google</Button></a>
+                        </Stack>
+                </Form>
                 )}
             </Formik>
             <Box paddingTop="25px">
