@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/button';
 import { Box } from '@chakra-ui/layout';
-import { Stack } from '@chakra-ui/react';
+import { Stack, Center, Text, Image  } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
@@ -10,6 +10,7 @@ import Layout from '../components/Layout';
 import { useRegisterMutation } from '../generated/graphql';
 import ErrorMap from '../utils/error-map';
 import { urqlClient } from '../utils/urqlClient';
+import { Header } from "../components/Header";
 
 interface registerProps {}
 
@@ -20,7 +21,13 @@ const Register : React.FC<registerProps>  = ({}) => {
     const router = useRouter();
     const [, register] = useRegisterMutation();
     return(
-        <Layout size="small">
+        <>
+        <Header />
+        <Box bgGradient="linear(to-r, green.200, pink.500)" position="fixed" width="100%" height="100%" >
+        <Center>
+        <Box maxW="md" borderWidth="1px" borderRadius="lg" backgroundColor="white" width="100%" margin="1%" height="520px">
+        <Text fontSize="28px" fontWeight="bold" padding="25px 25px 0 25px" color="#D7933A">Registrar</Text>
+        <Layout>
             <Formik
                 initialValues={{name:"", password:"", email:""}}
                 onSubmit={async (values, {setErrors}) => {
@@ -41,7 +48,7 @@ const Register : React.FC<registerProps>  = ({}) => {
                         <Box mt={4}>
                             <InputField name="password" label="Contraseña" placeholder="Contraseña" type="password"/>
                         </Box>
-                        <Stack direction="column">
+                        <Stack>
                             <Button mt={4} type="submit" isLoading={isSubmitting} colorScheme="teal">Registrarse</Button>
                             <a href="http://localhost:8080/auth/facebook"><Button mt={4} type="button" colorScheme="facebook">Iniciar con Facebook</Button></a>
                         <a href="http://localhost:8080/google"><Button mt={4} type="button" colorScheme="gray">Iniciar con Google</Button></a>
@@ -50,6 +57,10 @@ const Register : React.FC<registerProps>  = ({}) => {
                 )}
             </Formik>
         </Layout>
+        </Box>
+        </Center>
+        </Box>
+        </>
     );
 }
 

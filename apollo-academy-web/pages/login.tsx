@@ -9,7 +9,9 @@ import { useLoginMutation } from '../generated/graphql';
 import ErrorMap from '../utils/error-map';
 import { urqlClient } from '../utils/urqlClient';
 import NextLink from 'next/link';
-import { Link } from "@chakra-ui/react";
+import { Link, Text, Center } from "@chakra-ui/react";
+import { Header } from "../components/Header";
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 interface loginProps {}
 
@@ -19,8 +21,15 @@ interface loginProps {}
 const Login : React.FC<loginProps>  = ({}) => {
     const router = useRouter();
     const [, login] = useLoginMutation();
+    
     return(
-        <Layout size="small">
+        <>
+        <Header/>
+        <Box bgGradient="linear(to-r, green.200, pink.500)" position="fixed" width="100%" height="100%" >
+        <Center>
+        <Box maxW="md" borderWidth="1px" borderRadius="lg" backgroundColor="white" width="100%" margin="4%" height="450px">
+        <Text fontSize="28px" fontWeight="bold" padding="25px" color="#D7933A">Iniciar Sesión</Text>
+        <Layout >
             <Formik
                 initialValues={{password:"", email:""}}
                 onSubmit={async (values, {setErrors}) => {
@@ -32,9 +41,9 @@ const Login : React.FC<loginProps>  = ({}) => {
                     }                    
                 }}
             > 
-                {({values, isSubmitting}) => (
-                    <Form>
-                        <InputField name="email" label="Correo Electrónico" placeholder="juan@ejemplo.com" type="email"/>
+                {({isSubmitting}) => (
+                <Form>
+                        <InputField name="email" label="Correo Electrónico" placeholder="juan@ejemplo.com" type="email" />
                         <Box mt={4}>
                             <InputField name="password" label="Contraseña" placeholder="Contraseña" type="password"/>
                         </Box>
@@ -44,10 +53,16 @@ const Login : React.FC<loginProps>  = ({}) => {
                     </Form>
                 )}
             </Formik>
-            <NextLink href="/restorepassword" >
-                <Link color="teal.500">Olvidaste tu contraseña</Link>
+            <Box paddingTop="25px">
+            <NextLink href="/restorepassword">
+                <Link color="teal.500">Olvidaste tu contraseña<ExternalLinkIcon mx="2px" /></Link>
             </NextLink>
+            </Box>
         </Layout>
+        </Box>
+        </Center>
+        </Box>
+        </>
     );
 }
 
