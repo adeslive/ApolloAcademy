@@ -21,6 +21,7 @@ export class Teacher extends BaseEntity {
     @ManyToOne(() => Coordinator, coordinator => coordinator.teachers, {nullable: true})
     coordinator!: Coordinator;
 
+    @Field(() => [VirtualClassroom])
     @OneToMany(() => VirtualClassroom, virtualclassroom => virtualclassroom.teacher)
     classrooms!: VirtualClassroom[];
 }

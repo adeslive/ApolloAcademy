@@ -10,6 +10,9 @@ export class User extends BaseEntity {
     @Field(() => ID)
     @PrimaryGeneratedColumn()
     id!: number;
+    
+    @Column()
+    stripe_customer!: string;
 
     @Field(() => Oauth)
     @OneToOne(() => Oauth, oauth => oauth.user , {nullable: true})

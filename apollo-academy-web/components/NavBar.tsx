@@ -39,6 +39,7 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
         body = (
             <Flex>
                 <Box mr={2}>{data.verifyLogin.name}</Box>
+                <Button mr={2} variant="link" onClick={() => { router.push('/home') }}>Home</Button>
                 <Button variant="link" onClick={() => { logoutPage() }}>Cerrar sesión</Button>
             </Flex>
         );
@@ -46,10 +47,7 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
 
     return (
         <Flex p={4} backgroundColor="#130032" onMouseEnter={() => setfocusSearch(true)} onMouseLeave={() => setfocusSearch(false)}>
-            <Flex color="white">
-                <Search2Icon my={"auto"} mr={2} cursor={"pointer"} />
-                <Input type={"search"} _focus={{ borderBottom: "1px", borderBottomColor: "white" }} width={"100%"} border={"transparent"} rounded={"0px"} borderRadius={"1px"} placeholder="Busqueda" />
-            </Flex>
+            
             <Box ml={"auto"} my={"auto"} color="white">
                 {body}
             </Box>

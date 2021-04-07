@@ -39,6 +39,8 @@ const Login : React.FC<loginProps>  = ({}) => {
                             <InputField name="password" label="Contraseña" placeholder="Contraseña" type="password"/>
                         </Box>
                         <Button mt={4} type="submit"  isLoading={isSubmitting} colorScheme="teal">Ingresar</Button>
+                        <a href="http://localhost:8080/auth/facebook"><Button mt={4} type="button" colorScheme="facebook">Iniciar con Facebook</Button></a>
+                        <a href="http://localhost:8080/google"><Button mt={4} type="button" colorScheme="gray">Iniciar con Google</Button></a>
                     </Form>
                 )}
             </Formik>

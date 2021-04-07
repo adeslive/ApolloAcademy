@@ -1,5 +1,0 @@
-query getCourse($course: Int!) {
-    getCourse(course: $course) {
-        ...RegularCourse
-    }
-}

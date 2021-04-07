@@ -1,0 +1,26 @@
+query getClassrooms {
+  classrooms {
+    id
+    link
+    description
+    capacity
+    
+    course {
+        id
+        name
+        price
+        language {
+        	id
+          name
+          code
+        }
+      }
+    
+    teacher{
+      id
+      user {
+        ...RegularUser
+      }
+    }
+  }
+}

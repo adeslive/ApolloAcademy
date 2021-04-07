@@ -1,6 +1,6 @@
-mutation createCheckoutSession
+mutation createCheckoutSession($id: ID!)
 {
-  createCheckout(classroom:1) {
+  createCheckout(classroom: $id) {
     errors {
       field
       message

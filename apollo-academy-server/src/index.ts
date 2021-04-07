@@ -1,41 +1,32 @@
-import { Course } from './entities/Course';
-import { Teacher } from './entities/Teacher';
-import { CourseResolver } from './resolvers/CourseResolver';
-import "reflect-metadata";
-
-import { Oauth } from './entities/Oauth';
 import { ApolloServer } from 'apollo-server-express';
-import { User } from './entities/User';
-
+import argon2 from 'argon2';
+//Middleware
+import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
-import Stripe from 'stripe';
-
+import * as nodemailer from 'nodemailer';
 //OAuth2
 import passport from 'passport';
 import * as FacebookStrategy from 'passport-facebook';
 import * as GoogleStrategy from 'passport-google-oauth';
-
-import * as nodemailer from 'nodemailer';
-
-//Middleware
-import cors from 'cors';
-import argon2 from 'argon2'
-
+import "reflect-metadata";
 import FileStore from 'session-file-store';
+import Stripe from 'stripe';
 import { buildSchema } from 'type-graphql';
 import { createConnection } from "typeorm";
-
+import fileStoreConfig from "./config/file-store.config";
+// Configs
+import ormConfig from './config/orm.config';
+import { Oauth } from './entities/Oauth';
+import { User } from './entities/User';
+import { ClasroomResolver } from './resolvers/ClassroomResolver';
+import { CourseResolver } from './resolvers/CourseResolver';
+import { PaymentResolver } from "./resolvers/PaymentResolver";
+import { TeacherResolver } from './resolvers/TeacherResolver';
 // Resolvers
 import { UserResolver } from './resolvers/UserResolver';
 
-// Configs
-import ormConfig from './config/orm.config';
-import fileStoreConfig from "./config/file-store.config";
-import { PaymentResolver } from "./resolvers/PaymentResolver";
-
 const crypto = require('crypto');
-import faker from 'faker';
 
 const main = async () => {
 
@@ -157,7 +148,7 @@ const main = async () => {
     // Server Graphql
     const apollo = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, PaymentResolver, CourseResolver],
+            resolvers: [UserResolver, PaymentResolver, CourseResolver, ClasroomResolver, TeacherResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({ req, res, transport, stripe })

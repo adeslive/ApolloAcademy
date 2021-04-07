@@ -1,0 +1,19 @@
+query getClassroomsByCourse($id: ID!) {
+  classroomsByCourse(id: $id) {
+    id
+    description
+    capacity
+    link
+    
+    course {
+      ...RegularCourse
+    }
+    
+    teacher{
+      id
+      user {
+        ...RegularUser
+      }
+    }
+  }
+}

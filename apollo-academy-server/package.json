@@ -9,7 +9,10 @@
     "dev-ts": "nodemon --exec ts-node src/index.ts",
     "start": "node dist/index.js",
     "start-ts": "ts-node src/index.ts",
-    "migrate": "mikro-orm migration:create"
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
+    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.33",
@@ -50,6 +53,7 @@
     "session-file-store": "^1.5.0",
     "stripe": "^8.138.0",
     "type-graphql": "^1.1.1",
+    "typeorm-seeding": "^1.6.1",
     "yarn": "^1.22.10"
   }
 }

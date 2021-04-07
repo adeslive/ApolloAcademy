@@ -16,16 +16,36 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  classrooms: Array<VirtualClassroom>;
+  classroomsByCourse: Array<VirtualClassroom>;
+  classroom: VirtualClassroom;
   courses: Array<Course>;
-  getCourse: Course;
+  isPaid: Scalars['Boolean'];
+  teacher: Teacher;
   verifyLogin?: Maybe<User>;
   users: Array<User>;
   user: User;
+  mycourses: Array<Course>;
 };
 
 
-export type QueryGetCourseArgs = {
-  course: Scalars['Int'];
+export type QueryClassroomsByCourseArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryClassroomArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryIsPaidArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryTeacherArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -33,30 +53,10 @@ export type QueryUserArgs = {
   id: Scalars['ID'];
 };
 
-export type Course = {
-  __typename?: 'Course';
-  id: Scalars['ID'];
-  language: Language;
-  classrooms: VirtualClassroom;
-  name: Scalars['String'];
-  description: Scalars['String'];
-  price: Scalars['Float'];
-  active: Scalars['String'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
-export type Language = {
-  __typename?: 'Language';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  code: Scalars['String'];
-  active: Scalars['Boolean'];
-};
-
 export type VirtualClassroom = {
   __typename?: 'VirtualClassroom';
   id: Scalars['ID'];
+  description: Scalars['String'];
   teacher: Teacher;
   course: Course;
   capacity: Scalars['Int'];
@@ -67,6 +67,7 @@ export type Teacher = {
   __typename?: 'Teacher';
   id: Scalars['ID'];
   user: User;
+  classrooms: Array<VirtualClassroom>;
 };
 
 export type User = {
@@ -87,16 +88,54 @@ export type Oauth = {
   active: Scalars['Boolean'];
 };
 
+export type Course = {
+  __typename?: 'Course';
+  id?: Maybe<Scalars['ID']>;
+  language: Language;
+  classrooms: Array<VirtualClassroom>;
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  active: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type Language = {
+  __typename?: 'Language';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  code: Scalars['String'];
+  active?: Maybe<Scalars['Boolean']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  course: Course;
+  getPayments: CResponse;
+  createCheckout: CResponse;
+  pay: CResponse;
   getCode: CResponse;
   restore: CResponse;
   changePassword: CResponse;
   register: CResponse;
   login: CResponse;
   logout: Scalars['Boolean'];
-  createCheckout: CResponse;
-  pay: CResponse;
+};
+
+
+export type MutationCourseArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreateCheckoutArgs = {
+  classroom: Scalars['ID'];
+};
+
+
+export type MutationPayArgs = {
+  key: Scalars['String'];
+  classroom: Scalars['ID'];
 };
 
 
@@ -129,16 +168,6 @@ export type MutationLoginArgs = {
   email: Scalars['String'];
 };
 
-
-export type MutationCreateCheckoutArgs = {
-  classroom: Scalars['Int'];
-};
-
-
-export type MutationPayArgs = {
-  classroom: Scalars['Int'];
-};
-
 export type CResponse = {
   __typename?: 'CResponse';
   errors?: Maybe<Array<ErrorField>>;
@@ -156,9 +185,10 @@ export type ErrorField = {
 export type Receipt = {
   __typename?: 'Receipt';
   id: Scalars['ID'];
-  virtualID: Scalars['Int'];
-  stripeID: Scalars['String'];
+  virtual: VirtualClassroom;
+  key: Scalars['String'];
   amount?: Maybe<Scalars['Float']>;
+  paid: Scalars['Boolean'];
   user: User;
   createdAt: Scalars['String'];
 };
@@ -178,13 +208,10 @@ export type RegularClassroomFragment = (
 
 export type RegularCourseFragment = (
   { __typename?: 'Course' }
-  & Pick<Course, 'id' | 'name' | 'description' | 'active' | 'createdAt' | 'price'>
+  & Pick<Course, 'id' | 'name' | 'price'>
   & { language: (
     { __typename?: 'Language' }
-    & Pick<Language, 'name' | 'code' | 'active'>
-  ), classrooms: (
-    { __typename?: 'VirtualClassroom' }
-    & RegularClassroomFragment
+    & Pick<Language, 'id' | 'name' | 'code'>
   ) }
 );
 
@@ -213,7 +240,9 @@ export type ChangePasswordMutation = (
   ) }
 );
 
-export type CreateCheckoutSessionMutationVariables = Exact<{ [key: string]: never; }>;
+export type CreateCheckoutSessionMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
 
 
 export type CreateCheckoutSessionMutation = (
@@ -275,6 +304,26 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
+export type PayMutationVariables = Exact<{
+  id: Scalars['ID'];
+  key: Scalars['String'];
+}>;
+
+
+export type PayMutation = (
+  { __typename?: 'Mutation' }
+  & { pay: (
+    { __typename?: 'CResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ErrorField' }
+      & Pick<ErrorField, 'field' | 'message'>
+    )>>, receipt?: Maybe<(
+      { __typename?: 'Receipt' }
+      & Pick<Receipt, 'id' | 'amount'>
+    )> }
+  ) }
+);
+
 export type RegisterMutationVariables = Exact<{
   name: Scalars['String'];
   email: Scalars['String'];
@@ -316,17 +365,158 @@ export type RestoreMutation = (
   ) }
 );
 
-export type GetCourseQueryVariables = Exact<{
-  course: Scalars['Int'];
+export type GetClassroomQueryVariables = Exact<{
+  id: Scalars['ID'];
 }>;
 
 
-export type GetCourseQuery = (
+export type GetClassroomQuery = (
   { __typename?: 'Query' }
-  & { getCourse: (
-    { __typename?: 'Course' }
-    & RegularCourseFragment
+  & { classroom: (
+    { __typename?: 'VirtualClassroom' }
+    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity'>
+    & { course: (
+      { __typename?: 'Course' }
+      & Pick<Course, 'id' | 'name' | 'price'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'name' | 'code'>
+      ) }
+    ), teacher: (
+      { __typename?: 'Teacher' }
+      & Pick<Teacher, 'id'>
+      & { user: (
+        { __typename?: 'User' }
+        & RegularUserFragment
+      ) }
+    ) }
   ) }
+);
+
+export type GetClassroomsByCourseQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetClassroomsByCourseQuery = (
+  { __typename?: 'Query' }
+  & { classroomsByCourse: Array<(
+    { __typename?: 'VirtualClassroom' }
+    & Pick<VirtualClassroom, 'id' | 'description' | 'capacity' | 'link'>
+    & { course: (
+      { __typename?: 'Course' }
+      & RegularCourseFragment
+    ), teacher: (
+      { __typename?: 'Teacher' }
+      & Pick<Teacher, 'id'>
+      & { user: (
+        { __typename?: 'User' }
+        & RegularUserFragment
+      ) }
+    ) }
+  )> }
+);
+
+export type GetClassroomsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetClassroomsQuery = (
+  { __typename?: 'Query' }
+  & { classrooms: Array<(
+    { __typename?: 'VirtualClassroom' }
+    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity'>
+    & { course: (
+      { __typename?: 'Course' }
+      & Pick<Course, 'id' | 'name' | 'price'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'name' | 'code'>
+      ) }
+    ), teacher: (
+      { __typename?: 'Teacher' }
+      & Pick<Teacher, 'id'>
+      & { user: (
+        { __typename?: 'User' }
+        & RegularUserFragment
+      ) }
+    ) }
+  )> }
+);
+
+export type GetTeacherQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetTeacherQuery = (
+  { __typename?: 'Query' }
+  & { teacher: (
+    { __typename?: 'Teacher' }
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'name' | 'email'>
+    ), classrooms: Array<(
+      { __typename?: 'VirtualClassroom' }
+      & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity'>
+      & { course: (
+        { __typename?: 'Course' }
+        & Pick<Course, 'id' | 'name' | 'price'>
+        & { language: (
+          { __typename?: 'Language' }
+          & Pick<Language, 'id' | 'name' | 'code'>
+        ) }
+      ) }
+    )> }
+  ) }
+);
+
+export type GetUserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & RegularUserFragment
+  ) }
+);
+
+export type IsPaidQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type IsPaidQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'isPaid'>
+);
+
+export type MyCoursesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyCoursesQuery = (
+  { __typename?: 'Query' }
+  & { mycourses: Array<(
+    { __typename?: 'Course' }
+    & Pick<Course, 'id' | 'name' | 'price'>
+    & { language: (
+      { __typename?: 'Language' }
+      & Pick<Language, 'id' | 'name' | 'code'>
+    ), classrooms: Array<(
+      { __typename?: 'VirtualClassroom' }
+      & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity'>
+      & { teacher: (
+        { __typename?: 'Teacher' }
+        & Pick<Teacher, 'id'>
+        & { user: (
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'name' | 'email'>
+        ) }
+      ) }
+    )> }
+  )> }
 );
 
 export type VerifyLoginQueryVariables = Exact<{ [key: string]: never; }>;
@@ -364,20 +554,14 @@ export const RegularCourseFragmentDoc = gql`
     fragment RegularCourse on Course {
   id
   name
-  description
-  active
-  createdAt
   price
   language {
+    id
     name
     code
-    active
-  }
-  classrooms {
-    ...RegularClassroom
   }
 }
-    ${RegularClassroomFragmentDoc}`;
+    `;
 export const ChangePasswordDocument = gql`
     mutation changePassword($password: String!, $email: String!) {
   changePassword(password: $password, email: $email) {
@@ -396,8 +580,8 @@ export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
 };
 export const CreateCheckoutSessionDocument = gql`
-    mutation createCheckoutSession {
-  createCheckout(classroom: 1) {
+    mutation createCheckoutSession($id: ID!) {
+  createCheckout(classroom: $id) {
     errors {
       field
       message
@@ -453,6 +637,24 @@ export const LogoutDocument = gql`
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
+export const PayDocument = gql`
+    mutation pay($id: ID!, $key: String!) {
+  pay(classroom: $id, key: $key) {
+    errors {
+      field
+      message
+    }
+    receipt {
+      id
+      amount
+    }
+  }
+}
+    `;
+
+export function usePayMutation() {
+  return Urql.useMutation<PayMutation, PayMutationVariables>(PayDocument);
+};
 export const RegisterDocument = gql`
     mutation Register($name: String!, $email: String!, $password: String!) {
   register(name: $name, email: $email, password: $password) {
@@ -487,16 +689,172 @@ export const RestoreDocument = gql`
 export function useRestoreMutation() {
   return Urql.useMutation<RestoreMutation, RestoreMutationVariables>(RestoreDocument);
 };
-export const GetCourseDocument = gql`
-    query getCourse($course: Int!) {
-  getCourse(course: $course) {
-    ...RegularCourse
+export const GetClassroomDocument = gql`
+    query getClassroom($id: ID!) {
+  classroom(id: $id) {
+    id
+    link
+    description
+    capacity
+    course {
+      id
+      name
+      price
+      language {
+        id
+        name
+        code
+      }
+    }
+    teacher {
+      id
+      user {
+        ...RegularUser
+      }
+    }
   }
 }
-    ${RegularCourseFragmentDoc}`;
+    ${RegularUserFragmentDoc}`;
 
-export function useGetCourseQuery(options: Omit<Urql.UseQueryArgs<GetCourseQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<GetCourseQuery>({ query: GetCourseDocument, ...options });
+export function useGetClassroomQuery(options: Omit<Urql.UseQueryArgs<GetClassroomQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetClassroomQuery>({ query: GetClassroomDocument, ...options });
+};
+export const GetClassroomsByCourseDocument = gql`
+    query getClassroomsByCourse($id: ID!) {
+  classroomsByCourse(id: $id) {
+    id
+    description
+    capacity
+    link
+    course {
+      ...RegularCourse
+    }
+    teacher {
+      id
+      user {
+        ...RegularUser
+      }
+    }
+  }
+}
+    ${RegularCourseFragmentDoc}
+${RegularUserFragmentDoc}`;
+
+export function useGetClassroomsByCourseQuery(options: Omit<Urql.UseQueryArgs<GetClassroomsByCourseQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetClassroomsByCourseQuery>({ query: GetClassroomsByCourseDocument, ...options });
+};
+export const GetClassroomsDocument = gql`
+    query getClassrooms {
+  classrooms {
+    id
+    link
+    description
+    capacity
+    course {
+      id
+      name
+      price
+      language {
+        id
+        name
+        code
+      }
+    }
+    teacher {
+      id
+      user {
+        ...RegularUser
+      }
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useGetClassroomsQuery(options: Omit<Urql.UseQueryArgs<GetClassroomsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetClassroomsQuery>({ query: GetClassroomsDocument, ...options });
+};
+export const GetTeacherDocument = gql`
+    query getTeacher($id: ID!) {
+  teacher(id: $id) {
+    user {
+      id
+      name
+      email
+    }
+    classrooms {
+      id
+      link
+      description
+      capacity
+      course {
+        id
+        name
+        price
+        language {
+          id
+          name
+          code
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useGetTeacherQuery(options: Omit<Urql.UseQueryArgs<GetTeacherQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetTeacherQuery>({ query: GetTeacherDocument, ...options });
+};
+export const GetUserDocument = gql`
+    query getUser($id: ID!) {
+  user(id: $id) {
+    ...RegularUser
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useGetUserQuery(options: Omit<Urql.UseQueryArgs<GetUserQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetUserQuery>({ query: GetUserDocument, ...options });
+};
+export const IsPaidDocument = gql`
+    query isPaid($id: ID!) {
+  isPaid(id: $id)
+}
+    `;
+
+export function useIsPaidQuery(options: Omit<Urql.UseQueryArgs<IsPaidQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<IsPaidQuery>({ query: IsPaidDocument, ...options });
+};
+export const MyCoursesDocument = gql`
+    query myCourses {
+  mycourses {
+    id
+    name
+    price
+    language {
+      id
+      name
+      code
+    }
+    classrooms {
+      id
+      link
+      description
+      capacity
+      teacher {
+        id
+        user {
+          id
+          name
+          email
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useMyCoursesQuery(options: Omit<Urql.UseQueryArgs<MyCoursesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyCoursesQuery>({ query: MyCoursesDocument, ...options });
 };
 export const VerifyLoginDocument = gql`
     query VerifyLogin {

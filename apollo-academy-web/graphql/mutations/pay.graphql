@@ -1,0 +1,14 @@
+mutation pay($id : ID!, $key : String!) {
+  pay(classroom: $id, key: $key)
+  {
+    errors{
+      field
+      message
+    }
+    
+    receipt {
+      id
+      amount
+    }
+  }
+}

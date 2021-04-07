@@ -11,18 +11,22 @@ export class Receipt extends BaseEntity{
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Field(() => Int)
+    @Field(() => VirtualClassroom)
     @OneToOne(() => VirtualClassroom)
     @JoinColumn()
-    virtualID!: number;
+    virtual!: number;
 
     @Field(() => String)
     @Column()
-    stripeID! : string;
+    key! : string;
 
     @Field(() => Float, {nullable: true})
     @Column({nullable: true})
     amount!: number;
+
+    @Field(() => Boolean)
+    @Column({default: false})
+    paid!: boolean;
 
     @Field(() => User)
     @OneToOne(() => User)

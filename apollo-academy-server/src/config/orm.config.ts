@@ -8,13 +8,14 @@ import { Oauth } from '../entities/Oauth';
 import { Course } from '../entities/Course';
 import { Language } from '../entities/Language';
 import { Receipt } from '../entities/Receipt';
+import path from 'path';
 
 export default {
     type: 'mysql',
     database: 'apolloacademy',
     username: 'root',
     password: '',
-    logging: true,
+    logging: false,
     synchronize: true,
     entities: [
         User, 
@@ -27,5 +28,7 @@ export default {
         Teacher,
         Receipt,
         VirtualClassroom
-    ]
+    ],
+    seeds: [path.join( __dirname,'../seeds/**/*{.ts,.js}')],
+    factories: [path.join( __dirname,'../factories/**/*{.ts,.js}')],
 } as Parameters<typeof typeorm.createConnection>[0];

@@ -12,12 +12,16 @@ export class VirtualClassroom extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Field(() => Teacher)
-    @ManyToOne(() => Teacher, teacher => teacher.classrooms, { primary: true })
-    teacher!: Teacher;
+    @Field(() => String)
+    @Column({type: "varchar"})
+    description!: string;
 
+    @Field(() => Teacher)
+    @ManyToOne(() => Teacher, teacher => teacher.classrooms)
+    teacher!: Teacher;
+    
     @Field(() => Course)
-    @ManyToOne(() => Course, course => course.classrooms, { primary: true })
+    @ManyToOne(() => Course, course => course.classrooms)
     course!: Course;
 
     @Field(() => Int)

@@ -1,0 +1,26 @@
+query getTeacher($id: ID!){
+  teacher(id: $id){
+    user {
+      id
+      name
+      email
+    }
+    classrooms {
+      id
+      link
+      description
+      capacity
+      
+      course {
+        id
+        name
+        price
+        language {
+        	id
+          name
+          code
+        }
+      }
+    }
+  }
+}

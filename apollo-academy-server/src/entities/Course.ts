@@ -17,17 +17,13 @@ export class Course extends BaseEntity {
     @JoinColumn()
     language!: Language;
 
-    @Field(() => VirtualClassroom)
+    @Field(() => [VirtualClassroom])
     @OneToMany(() => VirtualClassroom, classroom => classroom.course)
-    classrooms!: VirtualClassroom;
+    classrooms!: VirtualClassroom[];
 
     @Field(() => String)
     @Column({type: "varchar"})
     name!: string;
-
-    @Field(() => String)
-    @Column({type: "varchar"})
-    description!: string;
 
     @Field(() => Float)
     @Column({type: "float"})

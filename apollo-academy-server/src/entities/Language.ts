@@ -17,7 +17,7 @@ export class Language extends BaseEntity {
     @Column({type:"varchar"})
     code!:string;
 
-    @Field(() => Boolean)
+    @Field(() => Boolean, {defaultValue: true})
     @Column({type:"boolean"})
     active!: boolean;
 }

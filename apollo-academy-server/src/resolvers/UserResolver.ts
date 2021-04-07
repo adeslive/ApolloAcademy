@@ -1,9 +1,11 @@
+import { VirtualClassroom } from './../entities/VirtualClassroom';
 import { Oauth } from './../entities/Oauth';
 import argon2 from 'argon2';
 import { Arg, Ctx, Field, ID, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
 import { ORMContext, CResponse, ErrorField } from '../types';
 import { User } from './../entities/User';
 import { randomBytes } from 'crypto';
+import { Course } from '../entities/Course';
 
 // Verifican email y contraseña
 const emailT = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
@@ -50,7 +52,7 @@ export class UserResolver {
         @Arg('email', () => String) email: string,
         @Ctx() { req, transport }: ORMContext
     ): Promise<CResponse> {
-
+    
         const codigo = randomBytes(2).toString('hex');
         const user = await User.findOne({ where: { email: email } });
         if (!user) {
@@ -243,7 +245,22 @@ export class UserResolver {
         };
     }
 
-    @Mutation(() => Boolean)
+    @Query(() => [Course])
+    async mycourses(@Ctx() { req, res }: ORMContext) {
+        return Course.createQueryBuilder("course")
+            .leftJoinAndSelect("course.classrooms", "classroom")
+            .leftJoinAndSelect("course.language", "language")
+            .leftJoinAndSelect("classroom.teacher", "teacher")
+            .leftJoinAndSelect("teacher.user", "user")
+            .leftJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
+            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", {id: req.session.userID})
+            .where("course.active = 1")
+            .andWhere('receipt.paid = 1')
+            .andWhere("receipt.id IS NOT NULL")
+            .getMany();
+    }
+
+    @Mutation(() => Boolean)    
     async logout(@Ctx() { req, res }: ORMContext) {
 
         return new Promise(response => req.session.destroy(err => {

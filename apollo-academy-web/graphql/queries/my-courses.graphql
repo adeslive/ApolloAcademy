@@ -1,0 +1,28 @@
+query myCourses{
+    mycourses 
+    {
+      id
+        name
+        price
+        language {
+        	id
+          name
+          code
+        }
+      classrooms {
+        id
+        link
+        description
+        capacity
+        
+        teacher{
+          id
+          user {
+            id
+            name
+            email
+          }
+        }
+      }
+    }
+}

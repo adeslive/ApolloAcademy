@@ -1,18 +1,10 @@
 fragment RegularCourse on Course {
     id
     name
-    description
-    active
-    createdAt
     price
-
     language {
+        id
         name
         code
-        active
-    }
-    
-    classrooms {
-        ...RegularClassroom
     }
 }
