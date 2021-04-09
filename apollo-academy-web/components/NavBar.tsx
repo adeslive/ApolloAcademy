@@ -45,12 +45,11 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
     } else {
         body = (
             <Flex>
-                <Button marginRight="500" variant="link" onClick={() => { Home() }}>Casa</Button>
+                <Button marginRight="500" variant="link" onClick={() => { router.push('/home') }}>Casa</Button>
                 <Button right="450" variant="link" onClick={() => { Home() }}>Cursos</Button>
                 <Button right="400" variant="link" onClick={() => { Home() }}>Mis Cursos</Button>
-                <Button right="350" variant="link" onClick={() => { Home() }}>Historial</Button>
+                <Button right="350" variant="link" onClick={() => { router.push('/history/-1') }}>Historial</Button>
                 <Box mr={2}>{data.verifyLogin.name}</Box>
-                <Button mr={2} variant="link" onClick={() => { router.push('/home') }}>Home</Button>
                 <Button variant="link" onClick={() => { logoutPage() }}>Cerrar sesión</Button>
             </Flex>
         );

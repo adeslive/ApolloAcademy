@@ -1,0 +1,36 @@
+mutation Receipt($id: ID!) {
+  receipt(id: $id) {
+    id
+    paid
+    amount
+    createdAt
+    
+		virtual {
+      id
+      description
+      capacity
+      enable
+      
+      teacher{
+        id
+        user {
+          id
+          name
+          email
+        }
+      }
+      
+      course {
+        id
+        name
+        createdAt
+        updatedAt
+        
+        language {
+          id
+          name
+        }
+      }
+    }
+  }
+}

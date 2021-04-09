@@ -19,7 +19,6 @@ export class UserResolver {
 
     @Query(() => User, { nullable: true })
     async verifyLogin(@Ctx() { req }: ORMContext) {
-        console.log(req.session.passport?.user.remote_id);
         if (req.session.userID) {
             return User.findOne({ id: req.session.userID })
         } else if (req.session.passport?.user) {

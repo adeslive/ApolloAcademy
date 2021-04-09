@@ -1,0 +1,8 @@
+query myReceipts {
+  myreceipts {
+    id
+    paid
+    amount
+    createdAt
+  }
+}

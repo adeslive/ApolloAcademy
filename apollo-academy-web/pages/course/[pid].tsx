@@ -1,8 +1,9 @@
 
-import { Box, Button, Center, Flex, Heading, SimpleGrid, Square, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Link, SimpleGrid, Square, Text } from "@chakra-ui/react";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
+import NextLink from 'next/link';
 import { useRouter } from "next/router";
 import React from "react";
 import Classroom from "../../components/Classroom";
@@ -10,6 +11,7 @@ import { Header } from "../../components/Header";
 import Layout from "../../components/Layout";
 import { useCreateCheckoutSessionMutation, useGetClassroomsQuery, useIsPaidQuery } from "../../generated/graphql";
 import { urqlClient } from "../../utils/urqlClient";
+
 interface CourseProps { }
 
 const Course: React.FC<CourseProps> = ({ }) => {
@@ -26,49 +28,12 @@ const Course: React.FC<CourseProps> = ({ }) => {
 
     const [, checkout] = useCreateCheckoutSessionMutation();
     const [{ data, fetching }] = useGetClassroomsQuery();
-    const [paid] = useIsPaidQuery({
-        pause: number == '-1',
-        variables: { id: number }
-    })
+
 
     const stripe = useStripe();
     const elements = useElements();
 
-    if (paid.fetching) {
 
-    } else if (!paid.data) {
-
-    } else {
-        if(!paid.data.isPaid){
-            formFunc = async () => {
-                if (!stripe || !elements) {
-                    return;
-                }
-
-                const res = await checkout({ id: classroom.course.id });
-
-                if (res.data.createCheckout.stripeID) {
-                    stripe.redirectToCheckout({ sessionId: res.data.createCheckout.stripeID });
-                }
-            }
-            
-            buyButton = (
-                <Box mt="4rem" w="20%">
-                    <Button type="submit" w="100%" mr="4rem" colorScheme="blue">Comprar</Button>
-                </Box>
-            )
-        }else{
-            formFunc = async () => {
-                alert("Cambio")
-            }
-
-            buyButton = (
-                <Box mt="4rem" w="20%">
-                    <Button type="submit" w="100%" mr="4rem" colorScheme="teal">Ingresar</Button>
-                </Box>
-            )
-        }
-    }
 
     if (fetching) {
 
@@ -106,6 +71,46 @@ const Course: React.FC<CourseProps> = ({ }) => {
                 })}
             </SimpleGrid>
         )
+
+        const [paid] = useIsPaidQuery({
+            pause: number == '-1',
+            variables: { id: number }
+        })
+        if (paid.fetching) {
+
+        } else if (!paid.data) {
+
+        } else {
+            if (!paid.data.isPaid) {
+                formFunc = async () => {
+                    if (!stripe || !elements) {
+                        return;
+                    }
+
+                    const res = await checkout({ id: classroom.course.id });
+                    console.log(res);
+                    if (res.data.createCheckout.stripeID) {
+                        stripe.redirectToCheckout({ sessionId: res.data.createCheckout.stripeID });
+                    }
+                }
+
+                buyButton = (
+                    <Box mt="4rem" w="20%">
+                        <Button type="submit" w="100%" mr="4rem" colorScheme="blue">Comprar</Button>
+                    </Box>
+                )
+            } else {
+                buyButton = (
+                    <Box mt="4rem" w="20%">
+                        <Link w="100%" mr="4rem" color="teal">
+                            <NextLink href={`./meeting/${classroom.link}`}>
+                                Ingresar
+                            </NextLink> 
+                        </Link>
+                    </Box>
+                )
+            }
+        }
     }
 
     return (
