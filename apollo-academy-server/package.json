@@ -10,7 +10,7 @@
     "start": "node dist/index.js",
     "start-ts": "ts-node src/index.ts",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed --root %cd%/src/config --configName orm.config.ts",
     "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
     "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync"
   },

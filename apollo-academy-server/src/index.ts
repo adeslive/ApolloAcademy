@@ -1,3 +1,4 @@
+import { ReceiptResolver } from './resolvers/ReceiptResolver';
 import { ApolloServer } from 'apollo-server-express';
 import argon2 from 'argon2';
 //Middleware
@@ -148,7 +149,9 @@ const main = async () => {
     // Server Graphql
     const apollo = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, PaymentResolver, CourseResolver, ClasroomResolver, TeacherResolver],
+            resolvers: [
+                UserResolver, PaymentResolver, CourseResolver, ClasroomResolver, TeacherResolver, ReceiptResolver
+            ],
             validate: false,
         }),
         context: ({ req, res }) => ({ req, res, transport, stripe })

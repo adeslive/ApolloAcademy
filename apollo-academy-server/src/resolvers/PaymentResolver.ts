@@ -60,14 +60,18 @@ export class PaymentResolver {
             await user.save();
         }
 
-        const receipt = new Receipt();
-        const codigo = randomBytes(16).toString('hex');
+        let receipt = await Receipt.findOne({where: {virtual: classID, user: user, paid: false}});
 
-        receipt.user = user;
-        receipt.amount = classroom?.course.price;
-        receipt.virtual = classID;
-        receipt.key = codigo;
-        await receipt.save();
+        if(!receipt){
+            receipt = new Receipt();
+            const codigo = randomBytes(16).toString('hex');
+
+            receipt.user = user;
+            receipt.amount = classroom?.course.price;
+            receipt.virtual = classID;
+            receipt.key = codigo;
+            await receipt.save();
+        }
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -83,8 +87,8 @@ export class PaymentResolver {
                 },
                 quantity: 1
             }],
-            success_url: `http://localhost:3000/pay/${receipt.id}?key=${codigo}`,
-            cancel_url: 'http://localhost:3000/pay/'
+            success_url: `http://localhost:3000/pay/${receipt.id}?key=${receipt.key}`,
+            cancel_url: 'http://localhost:3000/pay/-1'
         })
 
         return { stripeID: session.id };

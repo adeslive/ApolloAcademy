@@ -24,6 +24,10 @@ export class VirtualClassroom extends BaseEntity {
     @ManyToOne(() => Course, course => course.classrooms)
     course!: Course;
 
+    @Field(() => String)
+    @Column({type: 'time'})
+    time_start!: string;
+
     @Field(() => Int)
     @Column({ type: "int" })
     capacity!: number;
@@ -31,4 +35,8 @@ export class VirtualClassroom extends BaseEntity {
     @Field(() => String)
     @Column({ type: "varchar" })
     link!: string;
+
+    @Field(() => Boolean)
+    @Column({ type: "bool", default: true })
+    enable!: boolean;
 }

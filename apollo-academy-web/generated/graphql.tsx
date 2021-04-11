@@ -16,6 +16,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  myreceipts: Array<Receipt>;
   classrooms: Array<VirtualClassroom>;
   classroomsByCourse: Array<VirtualClassroom>;
   classroom: VirtualClassroom;
@@ -53,14 +54,27 @@ export type QueryUserArgs = {
   id: Scalars['ID'];
 };
 
+export type Receipt = {
+  __typename?: 'Receipt';
+  id: Scalars['ID'];
+  virtual?: Maybe<VirtualClassroom>;
+  key: Scalars['String'];
+  amount?: Maybe<Scalars['Float']>;
+  paid: Scalars['Boolean'];
+  user: User;
+  createdAt: Scalars['String'];
+};
+
 export type VirtualClassroom = {
   __typename?: 'VirtualClassroom';
   id: Scalars['ID'];
   description: Scalars['String'];
   teacher: Teacher;
   course: Course;
+  time_start: Scalars['String'];
   capacity: Scalars['Int'];
   link: Scalars['String'];
+  enable: Scalars['Boolean'];
 };
 
 export type Teacher = {
@@ -110,6 +124,7 @@ export type Language = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  receipt: Receipt;
   course: Course;
   getPayments: CResponse;
   createCheckout: CResponse;
@@ -120,6 +135,11 @@ export type Mutation = {
   register: CResponse;
   login: CResponse;
   logout: Scalars['Boolean'];
+};
+
+
+export type MutationReceiptArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -180,17 +200,6 @@ export type ErrorField = {
   __typename?: 'ErrorField';
   field: Scalars['String'];
   message: Scalars['String'];
-};
-
-export type Receipt = {
-  __typename?: 'Receipt';
-  id: Scalars['ID'];
-  virtual: VirtualClassroom;
-  key: Scalars['String'];
-  amount?: Maybe<Scalars['Float']>;
-  paid: Scalars['Boolean'];
-  user: User;
-  createdAt: Scalars['String'];
 };
 
 export type RegularClassroomFragment = (
@@ -320,6 +329,38 @@ export type PayMutation = (
     )>>, receipt?: Maybe<(
       { __typename?: 'Receipt' }
       & Pick<Receipt, 'id' | 'amount'>
+    )> }
+  ) }
+);
+
+export type ReceiptMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ReceiptMutation = (
+  { __typename?: 'Mutation' }
+  & { receipt: (
+    { __typename?: 'Receipt' }
+    & Pick<Receipt, 'id' | 'paid' | 'amount' | 'createdAt'>
+    & { virtual?: Maybe<(
+      { __typename?: 'VirtualClassroom' }
+      & Pick<VirtualClassroom, 'id' | 'description' | 'capacity' | 'enable'>
+      & { teacher: (
+        { __typename?: 'Teacher' }
+        & Pick<Teacher, 'id'>
+        & { user: (
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'name' | 'email'>
+        ) }
+      ), course: (
+        { __typename?: 'Course' }
+        & Pick<Course, 'id' | 'name' | 'createdAt' | 'updatedAt'>
+        & { language: (
+          { __typename?: 'Language' }
+          & Pick<Language, 'id' | 'name'>
+        ) }
+      ) }
     )> }
   ) }
 );
@@ -519,6 +560,17 @@ export type MyCoursesQuery = (
   )> }
 );
 
+export type MyReceiptsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyReceiptsQuery = (
+  { __typename?: 'Query' }
+  & { myreceipts: Array<(
+    { __typename?: 'Receipt' }
+    & Pick<Receipt, 'id' | 'paid' | 'amount' | 'createdAt'>
+  )> }
+);
+
 export type VerifyLoginQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -654,6 +706,44 @@ export const PayDocument = gql`
 
 export function usePayMutation() {
   return Urql.useMutation<PayMutation, PayMutationVariables>(PayDocument);
+};
+export const ReceiptDocument = gql`
+    mutation Receipt($id: ID!) {
+  receipt(id: $id) {
+    id
+    paid
+    amount
+    createdAt
+    virtual {
+      id
+      description
+      capacity
+      enable
+      teacher {
+        id
+        user {
+          id
+          name
+          email
+        }
+      }
+      course {
+        id
+        name
+        createdAt
+        updatedAt
+        language {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useReceiptMutation() {
+  return Urql.useMutation<ReceiptMutation, ReceiptMutationVariables>(ReceiptDocument);
 };
 export const RegisterDocument = gql`
     mutation Register($name: String!, $email: String!, $password: String!) {
@@ -855,6 +945,20 @@ export const MyCoursesDocument = gql`
 
 export function useMyCoursesQuery(options: Omit<Urql.UseQueryArgs<MyCoursesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MyCoursesQuery>({ query: MyCoursesDocument, ...options });
+};
+export const MyReceiptsDocument = gql`
+    query myReceipts {
+  myreceipts {
+    id
+    paid
+    amount
+    createdAt
+  }
+}
+    `;
+
+export function useMyReceiptsQuery(options: Omit<Urql.UseQueryArgs<MyReceiptsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyReceiptsQuery>({ query: MyReceiptsDocument, ...options });
 };
 export const VerifyLoginDocument = gql`
     query VerifyLogin {
