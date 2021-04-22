@@ -46,8 +46,8 @@ export const NavBar: React.FC<navbarProps> = ({ }) => {
         body = (
             <Flex>
                 <Button marginRight="500" variant="link" onClick={() => { router.push('/home') }}>Casa</Button>
-                <Button right="450" variant="link" onClick={() => { Home() }}>Cursos</Button>
-                <Button right="400" variant="link" onClick={() => { Home() }}>Mis Cursos</Button>
+                <Button right="450" variant="link" onClick={() => { router.push('/Cursos') }}>Cursos</Button>
+                <Button right="400" variant="link" onClick={() => {router.push('/Administracion') }}>Mis Cursos</Button>
                 <Button right="350" variant="link" onClick={() => { router.push('/history/-1') }}>Historial</Button>
                 <Box mr={2}>{data.verifyLogin.name}</Box>
                 <Button variant="link" onClick={() => { logoutPage() }}>Cerrar sesión</Button>

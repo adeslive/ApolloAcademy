@@ -1,0 +1,32 @@
+@media (min-width: 800px) {
+    .contenedor-app {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+    }
+    aside {
+        background-color: var(--blanco);
+        flex: 0 0 300px;
+    }
+    .seccion-principal {
+        flex: 100%;
+        padding: 50px;
+    }
+}
+
+
+/* BARRA LATERAL */
+
+aside {
+    padding: 2rem;
+    background-color: #319795;
+}
+
+h1 {
+    font-size: 28px !important;
+    font-family: var(--headingFont) !important;
+    font-weight: 900 !important;
+    margin: 0 0 4rem 0 !important;
+    text-align: center !important;
+    color: var(--gris2) !important;
+}
