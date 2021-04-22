@@ -3,6 +3,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, Button } from "@chakra-ui/reac
 import AdminIdioma from './AdminIdioma';
 import AdminCurso from './AdminCurso';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import AdminAulaVirtual from './AdminAulaVirtual';
 
 
 const SeccionPrinAdmin = () => {
@@ -17,7 +18,7 @@ const SeccionPrinAdmin = () => {
                 </div>
                 <Button bg="#D7933A" margin="5px" width="100%" onClick = {() => setContent(<AdminIdioma />)}> Agregar Idioma</Button>
                 <Button bg="#D7933A" margin="5px" width="100%" onClick = {() => setContent(<AdminCurso />)}> Agregar Curso </Button>
-                <Button bg="#D7933A" margin="5px" width="100%" onClick = {() => setContent(<AdminIdioma />)} > Agregar Aula Virtual</Button>
+                <Button bg="#D7933A" margin="5px" width="100%" onClick = {() => setContent(<AdminAulaVirtual />)} > Agregar Aula Virtual</Button>
             </aside>
             <div className="seccion-principal">
             <Tabs>

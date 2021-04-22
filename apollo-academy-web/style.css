@@ -9,7 +9,7 @@
         flex: 0 0 300px;
     }
     .seccion-principal {
-        flex: 100%;
+        flex: 1;
         padding: 50px;
     }
 }
