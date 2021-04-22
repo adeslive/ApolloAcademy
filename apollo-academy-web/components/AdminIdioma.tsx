@@ -15,22 +15,22 @@ const AdminIdioma = () => {
             </Thead>
             <Tbody>
                 <Tr>
-                <Td>inches</Td>
-                <Td>millimetres (mm)</Td>
-                <Td>millimetres (mm)</Td>
-                <Td>millimetres (mm)</Td>
+                <Td>1</Td>
+                <Td>Ingles</Td>
+                <Td>ING-25848</Td>
+                <Td>Activo</Td>
                 </Tr>
                 <Tr>
-                <Td>feet</Td>
-                <Td>centimetres (cm)</Td>
-                <Td>millimetres (mm)</Td>
-                <Td>millimetres (mm)</Td>
+                <Td>2</Td>
+                <Td>Frances</Td>
+                <Td>FRAN-49875</Td>
+                <Td>Activo</Td>
                 </Tr>
                 <Tr>
-                <Td>yards</Td>
-                <Td>metres (m)</Td>
-                <Td>millimetres (mm)</Td>
-                <Td>millimetres (mm)</Td>
+                <Td>3</Td>
+                <Td>Ruso</Td>
+                <Td>RUS-89714</Td>
+                <Td>Desactivo</Td>
                 </Tr>
             </Tbody>
             <Tfoot>
