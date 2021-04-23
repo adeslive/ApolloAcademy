@@ -60,9 +60,9 @@ export class PaymentResolver {
             await user.save();
         }
 
-        let receipt = await Receipt.findOne({where: {virtual: classID, user: user, paid: false}});
+        let receipt = await Receipt.findOne({ where: { virtual: classID, user: user, paid: false } });
 
-        if(!receipt){
+        if (!receipt) {
             receipt = new Receipt();
             const codigo = randomBytes(16).toString('hex');
 
@@ -124,19 +124,19 @@ export class PaymentResolver {
 
     @Query(() => Boolean)
     async isPaid(
-        @Arg('id', () => ID) id : number,
+        @Arg('id', () => ID) id: number,
         @Ctx() { req }: ORMContext
     ) {
         let receipt = null;
         receipt = Receipt.createQueryBuilder("receipt")
-        .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", {id: req.session.userID})
-        .leftJoin("receipt.virtual", "classroom")
-        .where('classroom.id = :id', {id: id})
-        .andWhere('receipt.paid = 1')
-        .andWhere("receipt.id IS NOT NULL")
-        .getOne();
+            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .leftJoin("receipt.virtual", "classroom")
+            .where('classroom.id = :id', { id: id })
+            .andWhere('receipt.paid = 1')
+            .andWhere("receipt.id IS NOT NULL")
+            .getOne();
 
-        if(await receipt) return true;
+        if (await receipt) return true;
         else {
             return false;
         }

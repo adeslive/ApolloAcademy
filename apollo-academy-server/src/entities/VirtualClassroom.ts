@@ -25,8 +25,12 @@ export class VirtualClassroom extends BaseEntity {
     course!: Course;
 
     @Field(() => String)
-    @Column({type: 'time'})
-    time_start!: string;
+    @Column({type: 'datetime'})
+    time_start = new Date();
+
+    @Field(() => Int)
+    @Column()
+    repeat!: number;
 
     @Field(() => Int)
     @Column({ type: "int" })

@@ -22,6 +22,10 @@
 				"database": "apolloacademy",
 				"username": "root"
 			}
-		]
+		],
+		"files.associations": {
+			"istream": "cpp",
+			"iostream": "cpp"
+		}
 	}
 }

@@ -37,7 +37,7 @@ const Course: React.FC<CourseProps> = ({ }) => {
 
     if (fetching) {
 
-    } else if (!data.classrooms && data.classrooms.length == 0) {
+    } else if (!data && !data.classrooms && data.classrooms.length == 0) {
 
     } else {
         let index = data.classrooms.findIndex((room) => {

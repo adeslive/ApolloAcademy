@@ -4,6 +4,7 @@ query getClassrooms {
     link
     description
     capacity
+    time_start
     
     course {
         id

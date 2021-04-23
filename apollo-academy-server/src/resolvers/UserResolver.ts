@@ -1,11 +1,12 @@
 import { VirtualClassroom } from './../entities/VirtualClassroom';
 import { Oauth } from './../entities/Oauth';
 import argon2 from 'argon2';
-import { Arg, Ctx, Field, ID, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
+import { Arg, Ctx, Field, ID, Int, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
 import { ORMContext, CResponse, ErrorField } from '../types';
 import { User } from './../entities/User';
 import { randomBytes } from 'crypto';
 import { Course } from '../entities/Course';
+import { date } from 'faker';
 
 // Verifican email y contraseña
 const emailT = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
@@ -51,7 +52,7 @@ export class UserResolver {
         @Arg('email', () => String) email: string,
         @Ctx() { req, transport }: ORMContext
     ): Promise<CResponse> {
-    
+
         const codigo = randomBytes(2).toString('hex');
         const user = await User.findOne({ where: { email: email } });
         if (!user) {
@@ -84,13 +85,13 @@ export class UserResolver {
         @Arg('email', () => String) email: string,
         @Ctx() { req, stripe }: ORMContext
     ): Promise<CResponse> {
-        
+
         // TO DO cambiar codigo, generar numeros
         const user = await User.findOne({ where: { email: email } });
         if (user && user.password_reset == code) {
             user.password_reset = "-1";
             user.save();
-            return { user };   
+            return { user };
         }
 
         return {
@@ -123,7 +124,7 @@ export class UserResolver {
             user.password = await argon2.hash(password);
             user.password_reset = "";
             user.save();
-            return { user };   
+            return { user };
         }
 
         return {
@@ -139,10 +140,10 @@ export class UserResolver {
         @Arg('name', () => String) name: string,
         @Arg('email', () => String) email: string,
         @Arg('password', () => String) password: string,
-        @Ctx() { req }: ORMContext
+        @Ctx() { req, transport }: ORMContext
     ): Promise<CResponse> {
 
-      
+
         let errors: ErrorField[] = [];
 
         if (!email || !emailT.test(email)) {
@@ -184,6 +185,31 @@ export class UserResolver {
         // Envia cookie para iniciar sesion al registrarse
         req.session.userID = user.id;
 
+        try{
+            await transport.sendMail({
+                from: '"Apollo Academy" <apolloacademyedu@gmail.com>', // sender address
+                to: email, // list of receivers
+                subject: "ApolloAcademy - Bienvenido", // Subject line
+                text: "Bienvenido", // plain text body
+                html: `<div style="margin: 4rem; background-color: LightGray; text-align: center; height: 500px">
+                <div style="">
+                  <h1>Bienvenido/a a ApolloAcademy</h1>
+                  <div style="background-color: white; margin: 0 4rem 4rem 4rem; height:400px">
+                    <div style="padding-top: 4rem">
+                      <h2> ${user.name} te damos la bienvenida a Apollo Academy</h2>
+                      <p>Para ingresar a nuestra aplicación puedes ingresar en el siguiente enlace: <a href="https://localhost:3000" target="_blank">Apollo Academy</a></p>
+                    </div>
+                    <div style="display: flex; margin: 4rem 10rem 0 10rem">
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>`, // html body
+            });
+        }catch(e)
+        {
+
+        }
         return { user };
     }
 
@@ -252,14 +278,14 @@ export class UserResolver {
             .leftJoinAndSelect("classroom.teacher", "teacher")
             .leftJoinAndSelect("teacher.user", "user")
             .leftJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
-            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", {id: req.session.userID})
+            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
             .where("course.active = 1")
             .andWhere('receipt.paid = 1')
             .andWhere("receipt.id IS NOT NULL")
             .getMany();
     }
 
-    @Mutation(() => Boolean)    
+    @Mutation(() => Boolean)
     async logout(@Ctx() { req, res }: ORMContext) {
 
         return new Promise(response => req.session.destroy(err => {
@@ -272,5 +298,66 @@ export class UserResolver {
             res.clearCookie("aid");
             response(true);
         }))
+    }
+
+    @Query(() => [Date])
+    async classroomdates(
+        @Ctx() { req }: ORMContext
+    ) {
+        let dates: Date[] = [];
+        const classrooms = await VirtualClassroom.createQueryBuilder("classroom")
+            .leftJoinAndSelect("classroom.teacher", "teacher")
+            .leftJoinAndSelect("teacher.user", "user")
+            .leftJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
+            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .where("classroom.enable = 1")
+            .andWhere('receipt.paid = 1')
+            .andWhere("receipt.id IS NOT NULL")
+            .getMany();
+
+        classrooms.forEach((value, index) => {
+            for (let i = 0; i < value.repeat + 1; i++) {
+                let date = new Date();
+                date.setDate(value.time_start.getDate() + i * 7)
+                dates.push(date);
+            }
+        })
+
+        return dates;
+    }
+
+    @Mutation(() => [VirtualClassroom])
+    async activities(
+        @Arg('date', () => Date) dateToCheck: Date,
+        @Ctx() { req }: ORMContext
+    ) {
+        let date = new Date(dateToCheck.getFullYear(), dateToCheck.getMonth(), dateToCheck.getDate())
+        let result : VirtualClassroom[] = [];
+        const classrooms = await VirtualClassroom.createQueryBuilder("classroom")
+            .leftJoinAndSelect("classroom.teacher", "teacher")
+            .leftJoinAndSelect("classroom.course", "course")
+            .leftJoinAndSelect("teacher.user", "user")
+            .leftJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
+            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .where("classroom.enable = 1")
+            .andWhere('receipt.paid = 1')
+            .andWhere("receipt.id IS NOT NULL")
+            .getMany();
+
+        classrooms.forEach((value, index) => {
+            for (let i = 0; i < value.repeat + 1; i++) {
+                let endDate = new Date(value.time_start.getFullYear(), value.time_start.getMonth(), value.time_start.getDate());
+                let startDate = new Date(value.time_start.getFullYear(), value.time_start.getMonth(), value.time_start.getDate());
+                startDate.setDate(value.time_start.getDate() + i * 7);
+                endDate.setDate(value.time_start.getDate() + i * 7 + 1);
+                if(date >= startDate && date < endDate)
+                {
+                    result.push(value);
+                    break;
+                }
+            }
+        })
+
+        return result;
     }
 }

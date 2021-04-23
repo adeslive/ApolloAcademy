@@ -36,6 +36,11 @@ export class ClasroomResolver {
     classroom(
         @Arg('id', () => ID) id : number
     ) : Promise<VirtualClassroom | undefined> {
+
+        return VirtualClassroom.findOne({
+            relations: ["course", "course.classrooms", "course.language", "teacher", "teacher.user"]
+        })
+
         return VirtualClassroom.createQueryBuilder("class")
             .leftJoinAndSelect("class.course", "course")
             .leftJoinAndSelect("course.classrooms", "classroom", "classroom.id <> :id", {id: id})

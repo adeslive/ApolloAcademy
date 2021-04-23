@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
@@ -21,12 +23,14 @@ export type Query = {
   classroomsByCourse: Array<VirtualClassroom>;
   classroom: VirtualClassroom;
   courses: Array<Course>;
+  searchCourses: Array<Course>;
   isPaid: Scalars['Boolean'];
   teacher: Teacher;
   verifyLogin?: Maybe<User>;
   users: Array<User>;
   user: User;
   mycourses: Array<Course>;
+  classroomdates: Array<Scalars['DateTime']>;
 };
 
 
@@ -37,6 +41,11 @@ export type QueryClassroomsByCourseArgs = {
 
 export type QueryClassroomArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QuerySearchCoursesArgs = {
+  query: Scalars['String'];
 };
 
 
@@ -72,6 +81,7 @@ export type VirtualClassroom = {
   teacher: Teacher;
   course: Course;
   time_start: Scalars['String'];
+  repeat: Scalars['Int'];
   capacity: Scalars['Int'];
   link: Scalars['String'];
   enable: Scalars['Boolean'];
@@ -122,6 +132,7 @@ export type Language = {
   active?: Maybe<Scalars['Boolean']>;
 };
 
+
 export type Mutation = {
   __typename?: 'Mutation';
   receipt: Receipt;
@@ -135,6 +146,7 @@ export type Mutation = {
   register: CResponse;
   login: CResponse;
   logout: Scalars['Boolean'];
+  activities: Array<VirtualClassroom>;
 };
 
 
@@ -188,6 +200,11 @@ export type MutationLoginArgs = {
   email: Scalars['String'];
 };
 
+
+export type MutationActivitiesArgs = {
+  date: Scalars['DateTime'];
+};
+
 export type CResponse = {
   __typename?: 'CResponse';
   errors?: Maybe<Array<ErrorField>>;
@@ -227,6 +244,23 @@ export type RegularCourseFragment = (
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'name' | 'email'>
+);
+
+export type GetActivitiesMutationVariables = Exact<{
+  date: Scalars['DateTime'];
+}>;
+
+
+export type GetActivitiesMutation = (
+  { __typename?: 'Mutation' }
+  & { activities: Array<(
+    { __typename?: 'VirtualClassroom' }
+    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity' | 'time_start'>
+    & { course: (
+      { __typename?: 'Course' }
+      & Pick<Course, 'id' | 'name'>
+    ) }
+  )> }
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -406,6 +440,14 @@ export type RestoreMutation = (
   ) }
 );
 
+export type GetClassroomDatesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetClassroomDatesQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'classroomdates'>
+);
+
 export type GetClassroomQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -465,7 +507,7 @@ export type GetClassroomsQuery = (
   { __typename?: 'Query' }
   & { classrooms: Array<(
     { __typename?: 'VirtualClassroom' }
-    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity'>
+    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity' | 'time_start'>
     & { course: (
       { __typename?: 'Course' }
       & Pick<Course, 'id' | 'name' | 'price'>
@@ -614,6 +656,25 @@ export const RegularCourseFragmentDoc = gql`
   }
 }
     `;
+export const GetActivitiesDocument = gql`
+    mutation GetActivities($date: DateTime!) {
+  activities(date: $date) {
+    id
+    link
+    description
+    capacity
+    time_start
+    course {
+      id
+      name
+    }
+  }
+}
+    `;
+
+export function useGetActivitiesMutation() {
+  return Urql.useMutation<GetActivitiesMutation, GetActivitiesMutationVariables>(GetActivitiesDocument);
+};
 export const ChangePasswordDocument = gql`
     mutation changePassword($password: String!, $email: String!) {
   changePassword(password: $password, email: $email) {
@@ -779,6 +840,15 @@ export const RestoreDocument = gql`
 export function useRestoreMutation() {
   return Urql.useMutation<RestoreMutation, RestoreMutationVariables>(RestoreDocument);
 };
+export const GetClassroomDatesDocument = gql`
+    query GetClassroomDates {
+  classroomdates
+}
+    `;
+
+export function useGetClassroomDatesQuery(options: Omit<Urql.UseQueryArgs<GetClassroomDatesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetClassroomDatesQuery>({ query: GetClassroomDatesDocument, ...options });
+};
 export const GetClassroomDocument = gql`
     query getClassroom($id: ID!) {
   classroom(id: $id) {
@@ -840,6 +910,7 @@ export const GetClassroomsDocument = gql`
     link
     description
     capacity
+    time_start
     course {
       id
       name

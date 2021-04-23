@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Link, SimpleGrid, Square, Text } from '@chakra-ui/layout';
-import { Avatar, Grid, GridItem, IconButton } from '@chakra-ui/react';
+import { Avatar, Button, Grid, GridItem, IconButton } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from "next/router";
 import NextLink from "next/link";
@@ -9,7 +9,7 @@ import Layout from "../components/Layout";
 import { useGetClassroomsQuery, useMyCoursesQuery } from '../generated/graphql';
 import { urqlClient } from "../utils/urqlClient";
 import Classroom from '../components/Classroom';
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 
 const HomeUser = () => {
@@ -109,8 +109,14 @@ const HomeUser = () => {
                     <GridItem p="2rem" colSpan={2} shadow="md" rounded="lg">
                         {all}
                     </GridItem>
-                    <GridItem p="2rem" colSpan={2} shadow="md" rounded="lg">
-                        <Heading as="h2">Cursos Recomendados</Heading>
+                    <GridItem p="2rem" colSpan={2}>
+                        <Box shadow="md" rounded="lg" height="95%">
+                            <Heading as="h2">Cursos Recomendados</Heading>
+                        </Box>
+                        
+                        <Button colorScheme="blue" width="100%" onClick={() => router.push('/course/calendar')}>
+                            Ver calendario de matriculas <ArrowForwardIcon h={8} w={8} />
+                        </Button>
                     </GridItem>
                 </Grid>
 

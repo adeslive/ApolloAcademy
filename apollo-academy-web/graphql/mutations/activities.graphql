@@ -1,0 +1,16 @@
+mutation GetActivities($date: DateTime!)
+{
+    activities(date: $date)
+    {
+        id
+        link
+        description
+        capacity
+        time_start
+
+        course {
+            id
+            name
+        }
+    }
+}

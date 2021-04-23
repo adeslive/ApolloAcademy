@@ -47,7 +47,7 @@ const main = async () => {
         secure: true, // true for 465, false for other ports
         auth: {
             user: "apolloacademyedu@gmail.com", // generated ethereal user
-            pass: "_No_More_Heroes091!", // generated ethereal password
+            pass: "yookyjsawyaafxwb", // generated ethereal password
         },
     });
 
