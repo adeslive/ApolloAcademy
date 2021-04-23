@@ -1,8 +1,12 @@
 import React from 'react';
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption } from "@chakra-ui/react";
+import Scrollbar from 'react-perfect-scrollbar';
 
 const AdminCurso= () => {
     return ( 
+        <>
+        <div>
+        <Scrollbar>
         <Table variant="simple">
             <TableCaption>Imperial to metric conversion factors</TableCaption>
             <Thead>
@@ -26,6 +30,7 @@ const AdminCurso= () => {
                     <Td>2021-04-21 20:13:58.129693</Td>
                     <Td>2021-04-21 20:13:58.129693</Td>
                     <Td>Activo</Td>
+                    <Td>Ingles</Td>
                     </Tr>
                 <Tr>
                     <Td>1</Td>
@@ -35,6 +40,7 @@ const AdminCurso= () => {
                     <Td>2021-04-21 20:13:58.129693</Td>
                     <Td>2021-04-21 20:13:58.129693</Td>
                     <Td>Activo</Td>
+                    <Td>Ingles</Td>
                 </Tr>
                 <Tr>
                     <Td>1</Td>
@@ -44,6 +50,7 @@ const AdminCurso= () => {
                     <Td>2021-04-21 20:13:58.129693</Td>
                     <Td>2021-04-21 20:13:58.129693</Td>
                     <Td>Activo</Td>
+                    <Td>Ingles</Td>
                 </Tr>
             </Tbody>
             <Tfoot>
@@ -55,6 +62,9 @@ const AdminCurso= () => {
                 </Tr>
             </Tfoot>
         </Table>
+        </Scrollbar>
+        </div>
+        </>
      );
 }
  

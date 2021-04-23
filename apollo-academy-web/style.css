@@ -2,7 +2,6 @@
     .contenedor-app {
         display: flex;
         min-height: 100vh;
-        width: 100%;
     }
     aside {
         background-color: var(--blanco);

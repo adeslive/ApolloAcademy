@@ -28,9 +28,7 @@ const SeccionPrinAdmin = () => {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <PerfectScrollbar>
                         {content}
-                        </PerfectScrollbar>
                     </TabPanel>
                     <TabPanel>
                     <p>two!</p>
