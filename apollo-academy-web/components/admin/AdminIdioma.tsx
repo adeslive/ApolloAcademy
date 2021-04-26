@@ -1,7 +1,8 @@
 import React from 'react';
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption } from "@chakra-ui/react";
 
-const AdminIdioma = () => {
+
+const AdminIdioma = ({...props}) => {
     return ( 
         <Table variant="simple">
             <TableCaption>Imperial to metric conversion factors</TableCaption>

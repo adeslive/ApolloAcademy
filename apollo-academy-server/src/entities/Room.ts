@@ -19,7 +19,7 @@ export class Room {
     @Field(() => VirtualClassroom)
     @ManyToMany(() => VirtualClassroom)
     @JoinColumn()
-    clasroom!: number;
+    clasrooms!: number;
 
     @Field()
     @Column()
