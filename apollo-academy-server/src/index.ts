@@ -124,7 +124,7 @@ const main = async () => {
 
     // Remplazar origin para el CORS si es necesario
     app.use(cors({
-        origin: 'http://localhost:3000',
+        origin: 'http://localhost',
         credentials: true
     }));
 
@@ -165,14 +165,14 @@ const main = async () => {
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         session: true
     }), async (req, res, next) => {
-        res.redirect(`http://localhost:3000/home`)
+        res.redirect(`http://localhost/home`)
     });
 
     app.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
     app.get('/google/callback', passport.authenticate('google', {
         session: true
     }), async (req, res, next) => {
-        res.redirect(`http://localhost:3000/home`)
+        res.redirect(`http://localhost/home`)
     });
 
     // ExpressJS escucha en este puerto

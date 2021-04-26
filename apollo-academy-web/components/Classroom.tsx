@@ -14,7 +14,7 @@ export type classRoomProps = Pick<VirtualClassroom, 'id' | 'link' | 'description
 
 };
 
-const Classroom: React.FC<classRoomProps> = ({ ...props }) => {
+const Classroom = ({ ...props }) => {
     return (
         <Flex border="1px" borderColor="gray.100" w={props.size !== "small" ? "20rem" : '14rem'} rounded="lg" bg="white" shadow="md" >
             <Square bg="indigo" w="10%" />

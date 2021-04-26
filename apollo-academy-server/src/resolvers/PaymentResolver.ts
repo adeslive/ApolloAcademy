@@ -93,8 +93,8 @@ export class PaymentResolver {
                 },
                 quantity: 1
             }],
-            success_url: `http://localhost:3000/pay/${receipt.id}?key=${receipt.key}`,
-            cancel_url: 'http://localhost:3000/pay/-1'
+            success_url: `http://localhost/pay/${receipt.id}?key=${receipt.key}`,
+            cancel_url: 'http://localhost/pay/-1'
         })
 
         return { stripeID: session.id };

@@ -1,7 +1,7 @@
-import { Box, Image, Stack } from '@chakra-ui/react';
+import { Box, Image, Stack, StackProps } from '@chakra-ui/react';
 import React from 'react';
 
-type CardProps = React.InputHTMLAttributes<HTMLInputElement>
+type CardProps = StackProps;
 
 const Card : React.FC<CardProps> = ({children, ...props}) => {
     

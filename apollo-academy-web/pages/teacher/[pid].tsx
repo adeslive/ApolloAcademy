@@ -28,7 +28,7 @@ const Teacher: React.FC<TeacherProps> = ({ }) => {
     if (fetching) {
 
     } else if (!data.teacher) {
-        router.push('http://localhost:3000/')
+        router.push('http://localhost/')
     } else {
 
         info = (
