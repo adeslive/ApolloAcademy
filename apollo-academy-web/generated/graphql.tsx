@@ -23,13 +23,13 @@ export type Query = {
   classroomsByCourse: Array<VirtualClassroom>;
   classroom: VirtualClassroom;
   courses: Array<Course>;
+  mycourses: Array<Course>;
   searchCourses: Array<Course>;
   isPaid: Scalars['Boolean'];
   teacher: Teacher;
   verifyLogin?: Maybe<User>;
   users: Array<User>;
   user: User;
-  mycourses: Array<Course>;
   classroomdates: Array<Scalars['DateTime']>;
 };
 
@@ -85,6 +85,8 @@ export type VirtualClassroom = {
   capacity: Scalars['Int'];
   link: Scalars['String'];
   enable: Scalars['Boolean'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Teacher = {
@@ -119,7 +121,7 @@ export type Course = {
   classrooms: Array<VirtualClassroom>;
   name: Scalars['String'];
   price: Scalars['Float'];
-  active: Scalars['String'];
+  active: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -136,7 +138,9 @@ export type Language = {
 export type Mutation = {
   __typename?: 'Mutation';
   receipt: Receipt;
+  changeClassRoomState: Scalars['Boolean'];
   course: Course;
+  changeCourseState: Scalars['Boolean'];
   getPayments: CResponse;
   createCheckout: CResponse;
   pay: CResponse;
@@ -155,8 +159,20 @@ export type MutationReceiptArgs = {
 };
 
 
+export type MutationChangeClassRoomStateArgs = {
+  newState: Scalars['Boolean'];
+  id: Scalars['ID'];
+};
+
+
 export type MutationCourseArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationChangeCourseStateArgs = {
+  newState: Scalars['Boolean'];
+  id: Scalars['ID'];
 };
 
 
@@ -221,7 +237,7 @@ export type ErrorField = {
 
 export type RegularClassroomFragment = (
   { __typename?: 'VirtualClassroom' }
-  & Pick<VirtualClassroom, 'id' | 'capacity' | 'link'>
+  & Pick<VirtualClassroom, 'id' | 'capacity' | 'link' | 'createdAt' | 'updatedAt' | 'enable'>
   & { teacher: (
     { __typename?: 'Teacher' }
     & Pick<Teacher, 'id'>
@@ -261,6 +277,28 @@ export type GetActivitiesMutation = (
       & Pick<Course, 'id' | 'name'>
     ) }
   )> }
+);
+
+export type ChangeClassRoomStateMutationVariables = Exact<{
+  id: Scalars['ID'];
+  state: Scalars['Boolean'];
+}>;
+
+
+export type ChangeClassRoomStateMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'changeClassRoomState'>
+);
+
+export type ChangeCourseStateMutationVariables = Exact<{
+  id: Scalars['ID'];
+  state: Scalars['Boolean'];
+}>;
+
+
+export type ChangeCourseStateMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'changeCourseState'>
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -457,7 +495,7 @@ export type GetClassroomQuery = (
   { __typename?: 'Query' }
   & { classroom: (
     { __typename?: 'VirtualClassroom' }
-    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity'>
+    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity' | 'createdAt' | 'updatedAt' | 'enable'>
     & { course: (
       { __typename?: 'Course' }
       & Pick<Course, 'id' | 'name' | 'price'>
@@ -485,7 +523,7 @@ export type GetClassroomsByCourseQuery = (
   { __typename?: 'Query' }
   & { classroomsByCourse: Array<(
     { __typename?: 'VirtualClassroom' }
-    & Pick<VirtualClassroom, 'id' | 'description' | 'capacity' | 'link'>
+    & Pick<VirtualClassroom, 'id' | 'description' | 'capacity' | 'link' | 'createdAt' | 'updatedAt' | 'enable'>
     & { course: (
       { __typename?: 'Course' }
       & RegularCourseFragment
@@ -507,7 +545,7 @@ export type GetClassroomsQuery = (
   { __typename?: 'Query' }
   & { classrooms: Array<(
     { __typename?: 'VirtualClassroom' }
-    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity' | 'time_start'>
+    & Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity' | 'time_start' | 'createdAt' | 'updatedAt' | 'enable'>
     & { course: (
       { __typename?: 'Course' }
       & Pick<Course, 'id' | 'name' | 'price'>
@@ -523,6 +561,32 @@ export type GetClassroomsQuery = (
         & RegularUserFragment
       ) }
     ) }
+  )> }
+);
+
+export type GetCoursesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCoursesQuery = (
+  { __typename?: 'Query' }
+  & { courses: Array<(
+    { __typename?: 'Course' }
+    & Pick<Course, 'id' | 'name' | 'price' | 'active' | 'createdAt' | 'updatedAt'>
+    & { language: (
+      { __typename?: 'Language' }
+      & Pick<Language, 'id' | 'name' | 'code'>
+    ), classrooms: Array<(
+      { __typename?: 'VirtualClassroom' }
+      & Pick<VirtualClassroom, 'id' | 'description'>
+      & { teacher: (
+        { __typename?: 'Teacher' }
+        & Pick<Teacher, 'id'>
+        & { user: (
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'name'>
+        ) }
+      ) }
+    )> }
   )> }
 );
 
@@ -642,6 +706,9 @@ export const RegularClassroomFragmentDoc = gql`
   }
   capacity
   link
+  createdAt
+  updatedAt
+  enable
 }
     ${RegularUserFragmentDoc}`;
 export const RegularCourseFragmentDoc = gql`
@@ -674,6 +741,24 @@ export const GetActivitiesDocument = gql`
 
 export function useGetActivitiesMutation() {
   return Urql.useMutation<GetActivitiesMutation, GetActivitiesMutationVariables>(GetActivitiesDocument);
+};
+export const ChangeClassRoomStateDocument = gql`
+    mutation changeClassRoomState($id: ID!, $state: Boolean!) {
+  changeClassRoomState(id: $id, newState: $state)
+}
+    `;
+
+export function useChangeClassRoomStateMutation() {
+  return Urql.useMutation<ChangeClassRoomStateMutation, ChangeClassRoomStateMutationVariables>(ChangeClassRoomStateDocument);
+};
+export const ChangeCourseStateDocument = gql`
+    mutation changeCourseState($id: ID!, $state: Boolean!) {
+  changeCourseState(id: $id, newState: $state)
+}
+    `;
+
+export function useChangeCourseStateMutation() {
+  return Urql.useMutation<ChangeCourseStateMutation, ChangeCourseStateMutationVariables>(ChangeCourseStateDocument);
 };
 export const ChangePasswordDocument = gql`
     mutation changePassword($password: String!, $email: String!) {
@@ -856,6 +941,9 @@ export const GetClassroomDocument = gql`
     link
     description
     capacity
+    createdAt
+    updatedAt
+    enable
     course {
       id
       name
@@ -886,6 +974,9 @@ export const GetClassroomsByCourseDocument = gql`
     description
     capacity
     link
+    createdAt
+    updatedAt
+    enable
     course {
       ...RegularCourse
     }
@@ -911,6 +1002,9 @@ export const GetClassroomsDocument = gql`
     description
     capacity
     time_start
+    createdAt
+    updatedAt
+    enable
     course {
       id
       name
@@ -933,6 +1027,38 @@ export const GetClassroomsDocument = gql`
 
 export function useGetClassroomsQuery(options: Omit<Urql.UseQueryArgs<GetClassroomsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetClassroomsQuery>({ query: GetClassroomsDocument, ...options });
+};
+export const GetCoursesDocument = gql`
+    query getCourses {
+  courses {
+    id
+    name
+    price
+    active
+    createdAt
+    updatedAt
+    language {
+      id
+      name
+      code
+    }
+    classrooms {
+      id
+      description
+      teacher {
+        id
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useGetCoursesQuery(options: Omit<Urql.UseQueryArgs<GetCoursesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetCoursesQuery>({ query: GetCoursesDocument, ...options });
 };
 export const GetTeacherDocument = gql`
     query getTeacher($id: ID!) {

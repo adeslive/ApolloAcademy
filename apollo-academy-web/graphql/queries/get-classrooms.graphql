@@ -5,6 +5,9 @@ query getClassrooms {
     description
     capacity
     time_start
+    createdAt
+    updatedAt
+    enable
     
     course {
         id

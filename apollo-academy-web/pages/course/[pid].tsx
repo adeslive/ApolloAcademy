@@ -11,6 +11,7 @@ import { Header } from "../../components/Header";
 import Layout from "../../components/Layout";
 import { useCreateCheckoutSessionMutation, useGetClassroomsQuery, useIsPaidQuery } from "../../generated/graphql";
 import { urqlClient } from "../../utils/urqlClient";
+import moment from 'moment';
 
 interface CourseProps { }
 
@@ -94,11 +95,28 @@ const Course: React.FC<CourseProps> = ({ }) => {
                     }
                 }
 
-                buyButton = (
-                    <Box mt="4rem" w="20%">
-                        <Button type="submit" w="100%" mr="4rem" colorScheme="blue">Comprar</Button>
-                    </Box>
-                )
+                let now = moment();
+                let max = moment(parseInt(classroom.time_start));
+                let min = moment(parseInt(classroom.time_start)).subtract(7, 'days');
+
+                console.log(now)
+                console.log(min)
+                console.log(max)
+
+                if(now >= min && now < max)
+                {
+                    buyButton = (
+                        <Box mt="4rem" w="20%">
+                            <Button type="submit" w="100%" mr="4rem" colorScheme="blue">Comprar</Button>
+                        </Box>
+                    )
+                }else{
+                    buyButton = (
+                        <Box mt="4rem" w="20%">
+                            <Button type="submit" w="100%" mr="4rem" colorScheme="gray" disabled>No disponible</Button>
+                        </Box>
+                    )
+                }
             } else {
                 buyButton = (
                     <Box mt="4rem" w="20%">

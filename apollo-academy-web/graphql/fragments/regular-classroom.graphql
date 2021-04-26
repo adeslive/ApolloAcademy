@@ -8,4 +8,7 @@ fragment RegularClassroom on VirtualClassroom {
     }
     capacity
     link
+    createdAt
+    updatedAt
+    enable
 }

@@ -29,7 +29,7 @@ export class Course extends BaseEntity {
     @Column({type: "float"})
     price!: number;
 
-    @Field(() => String)
+    @Field(() => Boolean)
     @Column({type:"boolean", default: true})
     active!: boolean;
 

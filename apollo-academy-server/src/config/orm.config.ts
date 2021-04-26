@@ -11,11 +11,11 @@ import { Receipt } from '../entities/Receipt';
 import path from 'path';
 
 export default {
-    type: 'postgres',
+    type: 'mysql',
     database: 'apolloacademy',
-    username: 'postgres',
-    password: '12345',
-    logging: true,
+    username: 'root',
+    password: '',
+    logging: false,
     synchronize: true,
     entities: [
         User, 

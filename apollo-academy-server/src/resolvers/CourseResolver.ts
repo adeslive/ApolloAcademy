@@ -9,7 +9,7 @@ export class CourseResolver {
 
     @Query(() => [Course])
     courses(): Promise<Course[]> {
-        return Course.find();
+        return Course.find({relations:["language", "classrooms", "classrooms.teacher", "classrooms.teacher.user"]});
     }
 
     @Mutation(() => Course)
@@ -18,13 +18,26 @@ export class CourseResolver {
     ): Promise<Course | undefined> {
 
         return Course.createQueryBuilder("course")
-            .leftJoinAndSelect("course.classrooms", "classroom")
-            .leftJoinAndSelect("course.language", "language")
-            .leftJoinAndSelect("course.teacher", "teacher")
-            .leftJoinAndSelect("teacher.user", "user")
-            .where("course.active = 1")
-            .andWhere("course.id = :id", { id: id })
+            .innerJoinAndSelect("course.classrooms", "classroom")
+            .innerJoinAndSelect("course.language", "language")
+            .innerJoinAndSelect("course.teacher", "teacher")
+            .innerJoinAndSelect("teacher.user", "user")
+            .where("course.id = :id", { id: id })
             .getOne();
+    }
+
+    @Query(() => [Course])
+    async mycourses(@Ctx() { req, res }: ORMContext) {
+        return Course.createQueryBuilder("course")
+            .innerJoinAndSelect("course.classrooms", "classroom")
+            .innerJoinAndSelect("course.language", "language")
+            .innerJoinAndSelect("classroom.teacher", "teacher")
+            .innerJoinAndSelect("teacher.user", "user")
+            .innerJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
+            .innerJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .where('receipt.paid = 1')
+            .andWhere("receipt.id IS NOT NULL")
+            .getMany();
     }
 
     @Query(() => [Course])
@@ -37,5 +50,26 @@ export class CourseResolver {
                 name: Like(`%${query}%`)
             }
         });
+    }
+
+    @Mutation(() => Boolean)
+    async changeCourseState(
+        @Arg('id', () => ID) id : number,
+        @Arg('newState', () => Boolean) newState : boolean
+    ){
+        const course = await Course.findOne({
+            where: { 
+                id: id
+            }
+        });
+
+        if(course)
+        {
+            course.active = newState;
+            course.save();
+            return true;
+        }
+
+        return false;
     }
 }

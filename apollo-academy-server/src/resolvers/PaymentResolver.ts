@@ -33,7 +33,7 @@ export class PaymentResolver {
             /*
             return User
             .createQueryBuilder("user")
-            .leftJoinAndSelect("user.oauth", "oauth")
+            .innerJoinAndSelect("user.oauth", "oauth")
             .where("oauth.remote_id = :id", { id: req.session.passport.user.remote_id })
             .getOne();*/
             const oauth = await Oauth.findOne({ where: { remote_id: req.session.passport?.user.remote_id } });
@@ -60,7 +60,13 @@ export class PaymentResolver {
             await user.save();
         }
 
-        let receipt = await Receipt.findOne({ where: { virtual: classID, user: user, paid: false } });
+        let receipt = await Receipt.createQueryBuilder("receipt")
+            .innerJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .leftJoin("receipt.virtual", "classroom")
+            .where('classroom.id = :id', { id: classID })
+            .andWhere('receipt.paid = 1')
+            .andWhere("receipt.id IS NOT NULL")
+            .getOne();
 
         if (!receipt) {
             receipt = new Receipt();
@@ -107,8 +113,51 @@ export class PaymentResolver {
         if (key == receipt.key) {
 
             receipt.paid = true;
-            receipt.save();
+            
 
+            let user = null;
+            if (req.session.userID) {
+                user = await User.findOne({ id: req.session.userID })
+            } else if (req.session.passport?.user) {
+                /*
+                return User
+                .createQueryBuilder("user")
+                .innerJoinAndSelect("user.oauth", "oauth")
+                .where("oauth.remote_id = :id", { id: req.session.passport.user.remote_id })
+                .getOne();*/
+                const oauth = await Oauth.findOne({ where: { remote_id: req.session.passport?.user.remote_id } });
+                if (oauth) {
+                    user = await User.findOne({ where: { oauth: oauth.id } });
+                }
+            }
+            console.log(user);
+            if(user != null && user != undefined)
+            {
+                try {
+                    let mail = await transport.sendMail({
+                        from: '"Apollo Academy" <apolloacademyedu@gmail.com>', // sender address
+                        to: user.email, // list of receivers
+                        subject: "ApolloAcademy - Bienvenido al curso", // Subject line
+                        text: "Bienvenido", // plain text body
+                        html: `<div style="margin: 4rem; background-color: LightGray; text-align: center; height: 500px">
+                        <div style="">
+                          <h1>Primero que nada gracias por todo</h1>
+                          <div style="background-color: white; margin: 0 4rem 4rem 4rem; height:400px">
+                            <div style="padding-top: 4rem">
+                              <h2> ${user.name} te damos la bienvenida al curso</h2>
+                              <p>Si tu no fuiste quien matriculo el curso, por favor ponte en contacto con este correo</p></p>
+                            </div>
+                            <div style="display: flex; margin: 4rem 10rem 0 10rem">
+                              
+                            </div>
+                          </div>
+                        </div>
+                      </div>`, // html body
+                    });
+                } catch (e) {
+                }
+            }
+            receipt.save();
             return {
                 receipt
             }
@@ -129,7 +178,7 @@ export class PaymentResolver {
     ) {
         let receipt = null;
         receipt = Receipt.createQueryBuilder("receipt")
-            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .innerJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
             .leftJoin("receipt.virtual", "classroom")
             .where('classroom.id = :id', { id: id })
             .andWhere('receipt.paid = 1')

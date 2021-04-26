@@ -3,7 +3,7 @@ import React from "react";
 import NextLink from 'next/link';
 import { Course, Language, RegularUserFragment, Teacher, VirtualClassroom } from "../generated/graphql";
 
-type classRoomProps = Pick<VirtualClassroom, 'id' | 'capacity' | 'link' | 'description'> & {
+export type classRoomProps = Pick<VirtualClassroom, 'id' | 'link' | 'description' | 'capacity' | 'createdAt' | 'updatedAt' | 'enable'> & {
     size?: string,
     teacher?: Pick<Teacher, 'id'> & {
         user: RegularUserFragment

@@ -1,6 +1,6 @@
 import { Float } from 'type-graphql';
 import { ObjectType, ID, Field, Int } from 'type-graphql';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Course } from './Course';
 import { Teacher } from './Teacher';
 
@@ -43,4 +43,12 @@ export class VirtualClassroom extends BaseEntity {
     @Field(() => Boolean)
     @Column({ type: "bool", default: true })
     enable!: boolean;
+
+    @Field(() => String)
+    @CreateDateColumn()
+    createdAt = new Date();
+
+    @Field(() => String)
+    @CreateDateColumn()
+    updatedAt = new Date();
 }

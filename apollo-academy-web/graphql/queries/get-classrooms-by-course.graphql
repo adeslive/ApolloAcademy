@@ -4,6 +4,9 @@ query getClassroomsByCourse($id: ID!) {
     description
     capacity
     link
+    createdAt
+    updatedAt
+    enable
     
     course {
       ...RegularCourse

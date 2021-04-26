@@ -26,7 +26,7 @@ export class UserResolver {
             /*
             return User
             .createQueryBuilder("user")
-            .leftJoinAndSelect("user.oauth", "oauth")
+            .innerJoinAndSelect("user.oauth", "oauth")
             .where("oauth.remote_id = :id", { id: req.session.passport.user.remote_id })
             .getOne();*/
             const oauth = await Oauth.findOne({ where: { remote_id: req.session.passport?.user.remote_id } });
@@ -142,7 +142,6 @@ export class UserResolver {
         @Arg('password', () => String) password: string,
         @Ctx() { req, transport }: ORMContext
     ): Promise<CResponse> {
-
 
         let errors: ErrorField[] = [];
 
@@ -270,21 +269,6 @@ export class UserResolver {
         };
     }
 
-    @Query(() => [Course])
-    async mycourses(@Ctx() { req, res }: ORMContext) {
-        return Course.createQueryBuilder("course")
-            .leftJoinAndSelect("course.classrooms", "classroom")
-            .leftJoinAndSelect("course.language", "language")
-            .leftJoinAndSelect("classroom.teacher", "teacher")
-            .leftJoinAndSelect("teacher.user", "user")
-            .leftJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
-            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
-            .where("course.active = 1")
-            .andWhere('receipt.paid = 1')
-            .andWhere("receipt.id IS NOT NULL")
-            .getMany();
-    }
-
     @Mutation(() => Boolean)
     async logout(@Ctx() { req, res }: ORMContext) {
 
@@ -306,10 +290,10 @@ export class UserResolver {
     ) {
         let dates: Date[] = [];
         const classrooms = await VirtualClassroom.createQueryBuilder("classroom")
-            .leftJoinAndSelect("classroom.teacher", "teacher")
-            .leftJoinAndSelect("teacher.user", "user")
-            .leftJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
-            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .innerJoinAndSelect("classroom.teacher", "teacher")
+            .innerJoinAndSelect("teacher.user", "user")
+            .innerJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
+            .innerJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
             .where("classroom.enable = 1")
             .andWhere('receipt.paid = 1')
             .andWhere("receipt.id IS NOT NULL")
@@ -334,11 +318,11 @@ export class UserResolver {
         let date = new Date(dateToCheck.getFullYear(), dateToCheck.getMonth(), dateToCheck.getDate())
         let result : VirtualClassroom[] = [];
         const classrooms = await VirtualClassroom.createQueryBuilder("classroom")
-            .leftJoinAndSelect("classroom.teacher", "teacher")
-            .leftJoinAndSelect("classroom.course", "course")
-            .leftJoinAndSelect("teacher.user", "user")
-            .leftJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
-            .leftJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
+            .innerJoinAndSelect("classroom.teacher", "teacher")
+            .innerJoinAndSelect("classroom.course", "course")
+            .innerJoinAndSelect("teacher.user", "user")
+            .innerJoinAndSelect("receipt", "receipt", "receipt.virtual = classroom.id ")
+            .innerJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
             .where("classroom.enable = 1")
             .andWhere('receipt.paid = 1')
             .andWhere("receipt.id IS NOT NULL")

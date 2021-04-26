@@ -1,5 +1,5 @@
 import { VirtualClassroom } from './../entities/VirtualClassroom';
-import { Arg, ID, Int, Query, Resolver } from "type-graphql";
+import { Arg, ID, Int, Mutation, Query, Resolver } from "type-graphql";
 
 
 @Resolver()
@@ -13,7 +13,7 @@ export class ClasroomResolver {
             .leftJoinAndSelect("course.language", "language")
             .leftJoinAndSelect("class.teacher", "teacher")
             .leftJoinAndSelect("teacher.user", "user")
-            .where("course.active = :active", {active: 1})
+            .where("course.active = 1")
             .getMany();
     }
 
@@ -27,7 +27,7 @@ export class ClasroomResolver {
             .leftJoinAndSelect("course.language", "language")
             .leftJoinAndSelect("class.teacher", "teacher")
             .leftJoinAndSelect("teacher.user", "user")
-            .where("course.active = :active", {active: 1})
+            .where("course.active = 1")
             .andWhere("course.id = :id", {id: id})
             .getMany();
     }
@@ -36,10 +36,6 @@ export class ClasroomResolver {
     classroom(
         @Arg('id', () => ID) id : number
     ) : Promise<VirtualClassroom | undefined> {
-
-        return VirtualClassroom.findOne({
-            relations: ["course", "course.classrooms", "course.language", "teacher", "teacher.user"]
-        })
 
         return VirtualClassroom.createQueryBuilder("class")
             .leftJoinAndSelect("class.course", "course")
@@ -50,5 +46,26 @@ export class ClasroomResolver {
             .where("course.active = 1")
             .andWhere("class.id = :id", {id: id})
             .getOne();
+    }
+
+    @Mutation(() => Boolean)
+    async changeClassRoomState(
+        @Arg('id', () => ID) id : number,
+        @Arg('newState', () => Boolean) newState : boolean
+    ){
+        const classroom = await VirtualClassroom.findOne({
+            where: { 
+                id: id
+            }
+        });
+
+        if(classroom)
+        {
+            classroom.enable = newState;
+            classroom.save();
+            return true;
+        }
+
+        return false;
     }
 }

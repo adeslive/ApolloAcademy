@@ -1,0 +1,4 @@
+mutation changeCourseState($id: ID!, $state: Boolean!)
+{
+    changeCourseState(id: $id, newState: $state)
+}

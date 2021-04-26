@@ -1,0 +1,4 @@
+mutation changeClassRoomState($id: ID!, $state: Boolean!)
+{
+    changeClassRoomState(id: $id, newState: $state)
+}

@@ -1,0 +1,30 @@
+query getCourses
+{
+ courses
+  {
+    id
+    name
+    price
+    active
+    createdAt
+    updatedAt
+    
+    language {
+      id
+      name
+      code
+    }
+		classrooms {
+      id
+      description
+      
+      teacher{
+        id
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+}
