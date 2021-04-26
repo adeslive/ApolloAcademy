@@ -2,14 +2,13 @@
     .contenedor-app {
         display: flex;
         min-height: 100vh;
-        width: 100%;
     }
     aside {
         background-color: var(--blanco);
         flex: 0 0 300px;
     }
     .seccion-principal {
-        flex: 100%;
+        flex: 1;
         padding: 50px;
     }
 }
