@@ -57,7 +57,7 @@ const main = async () => {
     passport.use(new GoogleStrategy.OAuth2Strategy({
         clientID: "884136061002-v6u64o0fgocg8c4v16tvkfnpidv6le3u.apps.googleusercontent.com",
         clientSecret: "2AchozudAaVa6ftf_cKbLEtg",
-        callbackURL: "http://18.189.235.128/google/callback",
+        callbackURL: "http://18.189.235.128:8080/google/callback",
     }, async (accessToken, refreshToken, profile, done) => {
 
         const { id, displayName } = profile;
@@ -85,7 +85,7 @@ const main = async () => {
     passport.use(new FacebookStrategy.Strategy({
         clientID: "471175010576407",
         clientSecret: "c061c9c973e44e932633ec6f3b01cc15",
-        callbackURL: "http://18.189.235.128/auth/facebook/callback",
+        callbackURL: "http://18.189.235.128:8080/auth/facebook/callback",
     }, async (accessToken, refreshToken, profile, done) => {
 
         const { id, displayName } = profile;
