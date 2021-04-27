@@ -11,7 +11,7 @@ import { Receipt } from '../entities/Receipt';
 import path from 'path';
 
 export default {
-    type: 'mysql',
+    type: 'mariadb',
     database: 'apolloacademy',
     username: 'root',
     password: '',

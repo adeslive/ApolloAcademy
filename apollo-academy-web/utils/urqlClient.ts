@@ -4,7 +4,7 @@ import { LoginMutation, RegisterDocument, RegisterMutation, VerifyLoginDocument,
 import { updateQuery } from './updateQuery';
 
 export const urqlClient = (ssrExchange: any) => ({
-    url: "http://localhost:8080/graphql",
+    url: "http://18.189.235.128/graphql",
     fetchOptions: {
         credentials: "include" as const
     },

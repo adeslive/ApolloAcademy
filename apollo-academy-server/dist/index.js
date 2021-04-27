@@ -80,7 +80,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     passport_1.default.use(new GoogleStrategy.OAuth2Strategy({
         clientID: "884136061002-v6u64o0fgocg8c4v16tvkfnpidv6le3u.apps.googleusercontent.com",
         clientSecret: "2AchozudAaVa6ftf_cKbLEtg",
-        callbackURL: "http://localhost:8080/google/callback",
+        callbackURL: "http://18.189.235.128/google/callback",
     }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
         const { id, displayName } = profile;
         const googleUsers = yield Oauth_1.Oauth.findOne({ remote_id: id });
@@ -103,7 +103,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     passport_1.default.use(new FacebookStrategy.Strategy({
         clientID: "471175010576407",
         clientSecret: "c061c9c973e44e932633ec6f3b01cc15",
-        callbackURL: "http://localhost:8080/auth/facebook/callback",
+        callbackURL: "http://18.189.235.128/auth/facebook/callback",
     }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
         const { id, displayName } = profile;
         const fbusers = yield Oauth_1.Oauth.findOne({ where: { remote_id: id } });
@@ -133,7 +133,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use(passport_1.default.session());
     // Remplazar origin para el CORS si es necesario
     app.use(cors_1.default({
-        origin: 'http://localhost',
+        origin: 'http://18.189.235.128',
         credentials: true
     }));
     // Sesiones
@@ -162,20 +162,20 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         }),
         context: ({ req, res }) => ({ req, res, transport, stripe })
     });
-    // Iniciar GraphQL, puedes ir a localhost:PUERTO/graphql 
+    // Iniciar GraphQL, puedes ir a 18.189.235.128:PUERTO/graphql 
     // para entrar en el sandbox
     apollo.applyMiddleware({ app, cors: false });
     app.get('/auth/facebook', passport_1.default.authenticate('facebook', { scope: ['email'] }));
     app.get('/auth/facebook/callback', passport_1.default.authenticate('facebook', {
         session: true
     }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        res.redirect(`http://localhost/home`);
+        res.redirect(`http://18.189.235.128/home`);
     }));
     app.get('/google', passport_1.default.authenticate('google', { scope: ['email', 'profile'] }));
     app.get('/google/callback', passport_1.default.authenticate('google', {
         session: true
     }), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        res.redirect(`http://localhost/home`);
+        res.redirect(`http://18.189.235.128/home`);
     }));
     // ExpressJS escucha en este puerto
     app.listen(8080, () => {
