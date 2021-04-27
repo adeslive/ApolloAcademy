@@ -1,0 +1,1 @@
+{"ast":null,"code":"// Wrapper\nexport function updateQuery(cache, qi, result, fn) {\n  return cache.updateQuery(qi, data => fn(result, data));\n}","map":null,"metadata":{},"sourceType":"module"}
