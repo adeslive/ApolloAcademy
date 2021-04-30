@@ -178,7 +178,7 @@ function updateQuery(cache, qi, result, fn) {
 
 
 const urqlClient = ssrExchange => ({
-  url: "http://18.189.235.128/graphql",
+  url: "http://18.189.235.128:8080/graphql",
   fetchOptions: {
     credentials: "include"
   },

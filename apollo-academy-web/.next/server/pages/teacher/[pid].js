@@ -1112,7 +1112,7 @@ function updateQuery(cache, qi, result, fn) {
 
 
 const urqlClient = ssrExchange => ({
-  url: "http://18.189.235.128/graphql",
+  url: "http://18.189.235.128:8080/graphql",
   fetchOptions: {
     credentials: "include"
   },
@@ -3760,7 +3760,7 @@ const Teacher = ({}) => {
   let body = null;
 
   if (fetching) {} else if (!data.teacher) {
-    router.push('http://18.189.235.128/');
+    router.push('/home');
   } else {
     info = /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxs"])(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["Fragment"], {
       children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])(_chakra_ui_react__WEBPACK_IMPORTED_MODULE_2__["Wrap"], {
