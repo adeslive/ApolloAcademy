@@ -1,6 +1,26 @@
 {
   "/_app": "pages/_app.js",
+  "/admin/classrooms": "pages/admin/classrooms.html",
+  "/admin/course": "pages/admin/course.html",
+  "/admin": "pages/admin.html",
+  "/admin/language": "pages/admin/language.html",
+  "/changepassword": "pages/changepassword.html",
+  "/coderestore": "pages/coderestore.html",
+  "/course/[pid]": "pages/course/[pid].js",
+  "/course/calendar": "pages/course/calendar.html",
+  "/course/courses": "pages/course/courses.html",
+  "/course/me": "pages/course/me.html",
+  "/course/meeting/[pid]": "pages/course/meeting/[pid].js",
+  "/history/[pid]": "pages/history/[pid].html",
+  "/home": "pages/home.html",
+  "/": "pages/index.html",
+  "/login": "pages/login.html",
+  "/offers": "pages/offers.html",
+  "/pay/[pid]": "pages/pay/[pid].js",
+  "/register": "pages/register.html",
+  "/restorepassword": "pages/restorepassword.html",
+  "/teacher/[pid]": "pages/teacher/[pid].js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/register": "pages/register.js"
+  "/404": "pages/404.html"
 }
