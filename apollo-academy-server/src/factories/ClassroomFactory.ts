@@ -9,7 +9,7 @@ define(VirtualClassroom, (faker : typeof Faker, course : any) => {
 
     classroom.capacity = faker.random.number(10);
     classroom.description = faker.random.words(20);
-    classroom.link = "https://apolloacademy.daily.co/OaO19WLAVqW8H9fBnQNr";
+    classroom.link = "5vHUmUXyr2u4wv16t2FD";
     
     classroom.teacher = factory(Teacher)() as any
     classroom.course = course;
