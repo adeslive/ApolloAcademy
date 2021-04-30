@@ -71,13 +71,8 @@ let PaymentResolver = class PaymentResolver {
                 user.stripe_customer = customer.id;
                 yield user.save();
             }
-            let receipt = yield Receipt_1.Receipt.createQueryBuilder("receipt")
-                .innerJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
-                .leftJoin("receipt.virtual", "classroom")
-                .where('classroom.id = :id', { id: classID })
-                .andWhere('receipt.paid = 1')
-                .andWhere("receipt.id IS NOT NULL")
-                .getOne();
+            let receipt = yield Receipt_1.Receipt.findOneOrFail({ where: { user: user, virtual: classID } });
+            console.log(receipt);
             if (!receipt) {
                 receipt = new Receipt_1.Receipt();
                 const codigo = crypto_1.randomBytes(16).toString('hex');

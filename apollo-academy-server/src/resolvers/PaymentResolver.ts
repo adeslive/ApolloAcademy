@@ -60,13 +60,9 @@ export class PaymentResolver {
             await user.save();
         }
 
-        let receipt = await Receipt.createQueryBuilder("receipt")
-            .innerJoinAndSelect("receipt.user", "payer", "payer.id = :id", { id: req.session.userID })
-            .innerJoin("receipt.virtual", "classroom")
-            .where('classroom.id = :id', { id: classID })
-            .andWhere('receipt.paid = 0')
-            .andWhere("receipt.id IS NOT NULL")
-            .getOne();
+        let receipt = await Receipt.findOneOrFail({ where: {user : user, virtual: classID}});
+
+        console.log(receipt)
 
         if (!receipt) {
             receipt = new Receipt();

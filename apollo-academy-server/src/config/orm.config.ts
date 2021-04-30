@@ -16,7 +16,7 @@ export default {
     database: 'apolloacademy',
     username: 'admin',
     password: 'WtsSq3tWnBXMnCP6Girj',
-    logging: false,
+    logging: true,
     synchronize: true,
     entities: [
         User, 
