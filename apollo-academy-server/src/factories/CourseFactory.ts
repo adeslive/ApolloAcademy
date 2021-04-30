@@ -8,7 +8,7 @@ import { Course } from '../entities/Course';
 define(Course, (faker : typeof Faker) => {
     const course = new Course();
 
-    course.name = "Curso de Idioma #2 ";
+    course.name = "Curso de Español";
     course.price = faker.random.number(100);
     course.language = factory(Language)() as any;
     

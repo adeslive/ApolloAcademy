@@ -5,6 +5,6 @@ const typeorm_seeding_1 = require("typeorm-seeding");
 typeorm_seeding_1.define(Language_1.Language, (faker) => {
     const language = new Language_1.Language();
     language.code = faker.random.word();
-    language.name = 'Inglés';
+    language.name = 'Español';
     return language;
 });

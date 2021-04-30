@@ -1,7 +1,7 @@
 import { VirtualClassroom } from './VirtualClassroom';
 import { User } from './User';
 import { Field, Float, ID, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity()
@@ -12,7 +12,7 @@ export class Receipt extends BaseEntity{
     id!: number;
 
     @Field(() => VirtualClassroom, {nullable: true})
-    @OneToOne(() => VirtualClassroom)
+    @ManyToOne(() => VirtualClassroom)
     @JoinColumn()
     virtual!: number;
 
@@ -29,7 +29,7 @@ export class Receipt extends BaseEntity{
     paid!: boolean;
 
     @Field(() => User)
-    @ManyToOne(() => User)
+    @OneToOne(() => User)
     @JoinColumn()
     user!: User;
 

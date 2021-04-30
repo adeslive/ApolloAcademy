@@ -7,7 +7,7 @@ typeorm_seeding_1.define(VirtualClassroom_1.VirtualClassroom, (faker, course) =>
     const classroom = new VirtualClassroom_1.VirtualClassroom();
     classroom.capacity = faker.random.number(10);
     classroom.description = faker.random.words(20);
-    classroom.link = "5vHUmUXyr2u4wv16t2FD";
+    classroom.link = "OaO19WLAVqW8H9fBnQNr";
     classroom.teacher = typeorm_seeding_1.factory(Teacher_1.Teacher)();
     classroom.course = course;
     return classroom;

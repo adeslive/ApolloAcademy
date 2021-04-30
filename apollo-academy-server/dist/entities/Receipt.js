@@ -27,7 +27,7 @@ __decorate([
 ], Receipt.prototype, "id", void 0);
 __decorate([
     type_graphql_1.Field(() => VirtualClassroom_1.VirtualClassroom, { nullable: true }),
-    typeorm_1.OneToOne(() => VirtualClassroom_1.VirtualClassroom),
+    typeorm_1.ManyToOne(() => VirtualClassroom_1.VirtualClassroom),
     typeorm_1.JoinColumn(),
     __metadata("design:type", Number)
 ], Receipt.prototype, "virtual", void 0);
@@ -48,7 +48,7 @@ __decorate([
 ], Receipt.prototype, "paid", void 0);
 __decorate([
     type_graphql_1.Field(() => User_1.User),
-    typeorm_1.ManyToOne(() => User_1.User),
+    typeorm_1.OneToOne(() => User_1.User),
     typeorm_1.JoinColumn(),
     __metadata("design:type", User_1.User)
 ], Receipt.prototype, "user", void 0);

@@ -6,7 +6,7 @@ define(Language, (faker : typeof Faker) => {
     const language = new Language();
     
     language.code = faker.random.word();
-    language.name = 'Inglés';
+    language.name = 'Español';
 
     return language;
 })

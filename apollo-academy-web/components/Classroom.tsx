@@ -29,7 +29,7 @@ const Classroom = ({ ...props }) => {
                     </Link>
                 </NextLink>
                 <Text as="sub">{props.course.language.name}</Text>
-                <Text isTruncated noOfLines={3} mt="1rem">
+                <Text isTruncated noOfLines={1} mt="1rem" wordBreak={'break-word'}>
                     {props.size !== 'small' && props.description}
                 </Text>
             </Box>
