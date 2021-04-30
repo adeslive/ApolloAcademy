@@ -30,7 +30,7 @@ export class User extends BaseEntity {
     @Column()
     password!: string;
 
-    @Column()
+    @Column({default: null})
     password_reset!: string;
 
     @Column({default: true})

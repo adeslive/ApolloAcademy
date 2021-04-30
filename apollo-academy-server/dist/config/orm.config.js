@@ -15,9 +15,10 @@ const Receipt_1 = require("../entities/Receipt");
 const path_1 = __importDefault(require("path"));
 exports.default = {
     type: 'mysql',
+    host: 'database-1.ckqzhwm1hfv8.us-east-2.rds.amazonaws.com',
     database: 'apolloacademy',
-    username: 'root',
-    password: '',
+    username: 'admin',
+    password: 'WtsSq3tWnBXMnCP6Girj',
     logging: false,
     synchronize: true,
     entities: [

@@ -26,7 +26,7 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column({ default: null }),
     __metadata("design:type", String)
 ], User.prototype, "stripe_customer", void 0);
 __decorate([
@@ -50,7 +50,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column({ default: null }),
     __metadata("design:type", String)
 ], User.prototype, "password_reset", void 0);
 __decorate([

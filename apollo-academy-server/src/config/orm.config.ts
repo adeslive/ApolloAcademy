@@ -11,10 +11,11 @@ import { Receipt } from '../entities/Receipt';
 import path from 'path';
 
 export default {
-    type: 'mariadb',
+    type: 'mysql',
+    host: 'database-1.ckqzhwm1hfv8.us-east-2.rds.amazonaws.com',
     database: 'apolloacademy',
-    username: 'root',
-    password: '',
+    username: 'admin',
+    password: 'WtsSq3tWnBXMnCP6Girj',
     logging: false,
     synchronize: true,
     entities: [
