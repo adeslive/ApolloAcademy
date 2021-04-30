@@ -196,7 +196,7 @@ export class UserResolver {
                   <div style="background-color: white; margin: 0 4rem 4rem 4rem; height:400px">
                     <div style="padding-top: 4rem">
                       <h2> ${user.name} te damos la bienvenida a Apollo Academy</h2>
-                      <p>Para ingresar a nuestra aplicación puedes ingresar en el siguiente enlace: <a href="https://18.189.235.128" target="_blank">Apollo Academy</a></p>
+                      <p>Para ingresar a nuestra aplicación puedes ingresar en el siguiente enlace: <a href="https://localhost" target="_blank">Apollo Academy</a></p>
                     </div>
                     <div style="display: flex; margin: 4rem 10rem 0 10rem">
                       

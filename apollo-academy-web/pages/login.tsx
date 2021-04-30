@@ -50,8 +50,8 @@ const Login : React.FC<loginProps>  = ({}) => {
                         <Stack>
                             <Button mt={4} type="submit"  isLoading={isSubmitting} colorScheme="teal">Ingresar</Button>
                             <hr/>
-                            <a href="http://18.189.235.128:8080/auth/facebook"><Button width="100%" mt={2} type="button" colorScheme="facebook"><Image src="facebook_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Facebook</Button></a>
-                            <a href="http://18.189.235.128:8080/google"><Button width="100%" mt={2} type="button" colorScheme="gray"><Image src="gmail_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Google</Button></a>
+                            <a href="http://localhost:8080/auth/facebook"><Button width="100%" mt={2} type="button" colorScheme="facebook"><Image src="facebook_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Facebook</Button></a>
+                            <a href="http://localhost:8080/google"><Button width="100%" mt={2} type="button" colorScheme="gray"><Image src="gmail_icon.png" boxSize="20px" borderRadius="full" marginX="7px"></Image>Iniciar con Google</Button></a>
                         </Stack>
                 </Form>
                 )}
